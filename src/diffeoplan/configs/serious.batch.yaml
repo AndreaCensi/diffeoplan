@@ -1,0 +1,328 @@
+
+- id: test_sample
+  desc: "another random test"
+  algorithms:
+  - samp_t1_l5
+  testcases:
+  - tc_orbit-pt256-40-n35s_lena_d4_000
+  - tc_orbit-pt256-40-n35s_lena_d4_001
+  
+
+- id: torus1_d10
+  desc: The torus is a system with only one possible action. 
+  desc_long: |
+    Preparation
+    -----------
+        
+    Prepare test cases using:
+
+        dp gentests -n 10 -l 10 -i lena dtx2
+
+    (this step should be automated)
+
+    Expectation
+    -----------
+    Basically every plan is of the form [0, 0, ...]: 
+    if you go around enough, you come back where you started.
+    
+    We expect all algorithms (except the random ones) 
+    to succeed and have the same plan.
+    
+    Reality
+    -------
+
+    ???
+
+  algorithms:
+  - graphsearch_deep_100
+  - graphsearch_breadth_100
+  - expansive_100_r5
+  testcases:
+  - tc_dtx2_lena_d10_*
+
+
+- id: test_misc2
+  desc: "another random test"
+  algorithms:
+  - generic_100
+  testcases:
+  - tc_dtx2_lena_d10_000
+
+- id: test_misc3
+  desc: "another random test"
+  algorithms:
+  - generic_100
+  testcases:
+  - tc_dcam3_lena_d10_000
+
+- id: test_misc4
+  desc: "another random test"
+  algorithms:
+  - gnbn1_it10
+  - gnbc1_it10
+  - gebn1_it10
+  - gebc1_it10
+  - bnbn1_it10
+  - bnbc1_it10
+  - bebn1_it10
+  - bebc1_it10
+  - h1_it10
+  testcases:
+  - tm_dcam3_lena_aaaaaaaaaa
+
+
+- id: test_misc5
+  desc: "another random test"
+  algorithms:
+  #- gnbn1_it1000
+  #- gnbc1_it1000
+  - gebn1_it1000
+  - gebc1_it1000
+  #- bnbn1_it1000
+  #- bnbc1_it1000
+  - bebn1_it1000
+  - bebc1_it1000
+  - begc1_it1000 # greedy
+  - betc1_it1000 # tree
+  - betc2_it1000 # with L2 distance
+  - begc2_it1000 # with L2 distance
+  - gegc2_it1000 # with L2 distance
+  - h1_it1000
+  testcases:
+  # - tm_dcam3_lena_aaaaaaaaaa
+  # - tm_dcam3_lena_aaaaa
+  - tm_dtxty_lena_aaaa
+  - tm_dtxty_lena_aaaaa
+  - tm_dtxty_lena_aaaaaaa
+  - tm_dtxty_lena_aaaaaaaaaaaaabbbbb
+
+- id: test_misc6
+  desc: "another random test"
+  algorithms:
+  #- gnbn1_it1000
+  #- gnbc1_it1000
+  - gebn1_it1000
+  - gebc1_it1000
+  #- bnbn1_it1000
+  testcases:
+  - tl_orbit-pt256-80x60_000
+
+- id: test_misc7
+  desc: |
+    log=~/diffeo-data/processed-data/160x120nz/orbit-pt256z2-window.600s.processed.bag
+    dp --contracts logcases ---log $log --dds orbit-pt256-160x120 -d 1 -n 1
+    dp --contracts logcases --log $log --dds orbit-pt256-160x120 -d 2 -n 1
+    dp --contracts logcases --log $log --dds orbit-pt256-160x120 -d 3 -n 1
+    dp --contracts logcases --log $log --dds orbit-pt256-160x120 -d 4 -n 1
+    dp --contracts logcases --log $log --dds orbit-pt256-160x120 -d 5 -n 1
+    dp --contracts logcases --log $log --dds orbit-pt256-160x120 -d 6 -n 1
+
+  algorithms:
+  #- gnbn1_it1000
+  #- gnbc1_it1000
+  - bnbn1_it1000
+  - bnbc1_it1000
+  - bebn1_it1000
+  - bebc1_it1000
+  #- bedc1_it1000
+  - begc1_it1000
+  - betc1_it1000
+  # - gebc1_it1000
+  #- bnbn1_it1000
+  testcases:
+  - tc_orbit-pt256-160x120_d1_000
+  - tc_orbit-pt256-160x120_d2_000
+  - tc_orbit-pt256-160x120_d3_000
+  - tc_orbit-pt256-160x120_d4_000
+  - tc_orbit-pt256-160x120_d5_000
+  - tc_orbit-pt256-160x120_d6_000
+
+
+ 
+  
+- id: tr1_orbit_r80
+  desc: |
+    "for a in 1 2 3 4 5 6 7 8 9 10 11 12; dp logcases --seed 42 -s orbit-pt256-80 --dds h1orbit-pt256-80-n35s -d $a -n 10"
+  algorithms:
+  - gnbn1_it1000
+  - gnbc1_it1000
+  - gebc1_it1000
+  - bnbn1_it1000 
+  - bnbc1_it1000
+  - bebn1_it1000
+  - bebc1_it1000
+  - begc1_it1000
+  - betc1_it1000
+  testcases:
+  - tc_h1orbit-pt256-80-n35s_d1_*
+  - tc_h1orbit-pt256-80-n35s_d2_*
+  - tc_h1orbit-pt256-80-n35s_d3_*
+  - tc_h1orbit-pt256-80-n35s_d4_*
+  - tc_h1orbit-pt256-80-n35s_d5_*
+  - tc_h1orbit-pt256-80-n35s_d6_*
+  - tc_h1orbit-pt256-80-n35s_d7_*
+  - tc_h1orbit-pt256-80-n35s_d8_*
+  - tc_h1orbit-pt256-80-n35s_d9_*
+  - tc_h1orbit-pt256-80-n35s_d10_*
+  - tc_h1orbit-pt256-80-n35s_d11_*
+  - tc_h1orbit-pt256-80-n35s_d12_*
+  
+
+
+- id: tr1_orbit_r80_b
+  desc: |
+    "for a in 1 2 3 4 5 6 7 8 9 10 11 12; dp logcases --seed 42 -s orbit-pt256-80 --dds h1orbit-pt256-80-n35s -d $a -n 10"
+  algorithms:
+  - gnbc1_it1000
+  - bnbc1_it1000
+  - bngc1_it1000
+  - bntc1_it1000
+  - gebc1_it1000
+  - bebc1_it1000
+  - begc1_it1000
+  - betc1_it1000
+  - betcb1_it1000
+  
+  testcases:
+  - tc_h1orbit-pt256-80-n35s_d1_*
+  - tc_h1orbit-pt256-80-n35s_d2_*
+  - tc_h1orbit-pt256-80-n35s_d3_*
+  - tc_h1orbit-pt256-80-n35s_d4_*
+  - tc_h1orbit-pt256-80-n35s_d5_*
+  - tc_h1orbit-pt256-80-n35s_d6_*
+  - tc_h1orbit-pt256-80-n35s_d7_*
+  - tc_h1orbit-pt256-80-n35s_d8_*
+  - tc_h1orbit-pt256-80-n35s_d9_*
+  - tc_h1orbit-pt256-80-n35s_d10_*
+  - tc_h1orbit-pt256-80-n35s_d11_*
+  - tc_h1orbit-pt256-80-n35s_d12_*
+
+
+- id: test_misc8s
+  desc: |
+    small
+  algorithms:
+  - begc1_it1000
+  - betc1_it1000
+  testcases:
+  - tc_h1orbit-pt256-80-n35s_d1_*
+  - tc_h1orbit-pt256-80-n35s_d2_*
+  - tc_h1orbit-pt256-80-n35s_d3_*
+  - tc_h1orbit-pt256-80-n35s_d4_*
+  - tc_h1orbit-pt256-80-n35s_d5_*
+  - tc_h1orbit-pt256-80-n35s_d6_*
+  - tc_h1orbit-pt256-80-n35s_d7_*
+  - tc_h1orbit-pt256-80-n35s_d8_*
+  - tc_h1orbit-pt256-80-n35s_d9_*
+  - tc_h1orbit-pt256-80-n35s_d10_*
+  - tc_h1orbit-pt256-80-n35s_d11_*
+  - tc_h1orbit-pt256-80-n35s_d12_*
+  
+
+
+
+- id: test_slow
+  desc: |
+    slow
+  algorithms:
+  - bnbn1_it1000
+  testcases:
+  - tc_h1orbit-pt256-80-n35s_d1_*
+  - tc_h1orbit-pt256-80-n35s_d2_*
+  - tc_h1orbit-pt256-80-n35s_d3_*
+  - tc_h1orbit-pt256-80-n35s_d4_*
+  - tc_h1orbit-pt256-80-n35s_d5_*
+  - tc_h1orbit-pt256-80-n35s_d6_*
+  - tc_h1orbit-pt256-80-n35s_d7_*
+  - tc_h1orbit-pt256-80-n35s_d8_*
+  - tc_h1orbit-pt256-80-n35s_d9_*
+  - tc_h1orbit-pt256-80-n35s_d10_*
+  - tc_h1orbit-pt256-80-n35s_d11_*
+  - tc_h1orbit-pt256-80-n35s_d12_*
+  
+
+
+
+- id: torus2_d10
+  desc: This is the torus, but now we can go both left and right.
+  desc_long: |
+    
+    Preparation
+    -----------
+        
+    Prepare test cases using:
+
+        dp gentests -n 10 -l 10 -i lena dtx1
+
+    (this step should be automated)
+
+    Expectation
+    -----------
+
+    ???
+    
+    Reality
+    -------
+
+    ???
+
+  algorithms:
+  - graphsearch_deep_100
+  - graphsearch_breadth_100
+  - expansive_100_r5
+  testcases:
+  - tc_dtx1_lena_d10_*
+
+
+- id: dcam1_d3
+  desc: "synthetic pan/tilt camera, small steps"
+  desc_long: |
+    
+    Preparation
+    -----------
+        
+    Prepare test cases using:
+
+        dp gentests -n 10 -l 3 -i lena dcam1
+
+    (this step should be automated)
+
+    Expectation
+    -----------
+
+    Dumb algorithms get the solution after minutes
+    Smart algorithms take much less
+    
+    Reality
+    -------
+
+    ???
+
+  algorithms:
+  - graphsearch_deep_5
+  testcases:
+  - tc_dcam1_*_d3_*
+
+
+
+- id: test_misc1
+  desc: ""
+  desc_long: |
+    
+    Preparation
+    -----------
+        
+    Prepare test cases using:
+
+        dp gentests -n 1 -l 5 -i lena orbit-pt256-80x60 dptcam3
+
+    (this step should be automated)
+
+    ???
+
+  algorithms:
+  - infotree1
+  testcases:
+  - tc_orbit-pt256-80x60_*_d5_000
+  - tc_dptcam3_*_d5_000
+

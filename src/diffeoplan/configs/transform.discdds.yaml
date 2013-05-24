@@ -1,0 +1,7 @@
+- id: "h1${dds}"
+  desc: "Transform the DiffeoSystem ${dds} with threshold"
+  code: 
+    - diffeoplan.library.discdds.HardChoiceIso
+    - id_dds: "${dds}"
+      norm_percentile: 10
+      factor: 0.7
