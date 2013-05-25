@@ -6,15 +6,18 @@ from diffeo2dds.visualization import guess_state_space
 from diffeo2s.utils import construct_matrix_iterators
 from diffeoplan import logger
 from diffeoplan.library.algo.diffeo_tree_search import DiffeoTreeSearch
-from diffeoplan.library.algo.memoize_strategy import dp_memoize_instance
+from diffeoplan.library import dp_memoize_instance
+from diffeoplan.library.analysis.covering.diffeo_cover_visualization import (
+    get_nodes_distance_matrix, edges_type_to_color, get_embedding_mds, plot_2d_graph,
+    plot_3d_graph)
+from diffeoplan.library.analysis.structure.diffeo_structure import (
+    DiffeoStructure)
 from ggs.drawing import draw_node_graph
 from ggs.generic_graph_search import GenericGraphSearch
 from reprep import Report, MIME_PNG
 import numpy as np
 import os
 import random
-from diffeoplan.library.analysis.covering.diffeo_cover_visualization import get_nodes_distance_matrix, \
-    edges_type_to_color, get_embedding_mds, plot_2d_graph, plot_3d_graph
 
 
 

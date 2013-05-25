@@ -3,10 +3,10 @@ from compmake import (batch_command, compmake_console, use_filesystem,
 from pprint import pformat
 import os
 from diffeoplan import logger
-from diffeoplan.programs.bench.bench_jobs import create_bench_jobs
+from .bench_jobs import create_bench_jobs
 
-@declare_command('batch',
-                 'batch <sets> -c command')
+# @declare_command('batch',
+#                  'batch <sets> -c command')
 def dp_batch_main(config, parser):
     """ Runs batch planning experiments from batch configuration files. """
     parser.add_option("-o", "--output", default='out/dp-batch',

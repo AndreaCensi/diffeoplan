@@ -1,6 +1,14 @@
 from collections import defaultdict, deque
-from diffeoplan.utils import memoize_instance as memoize
+from contracts import contract
+from diffeoplan import logger
+from diffeoplan.library import dp_memoize_instance
 from geometry import formatm
+import numpy as np
+import warnings
+from diffeo2s.utils import iterate_indices
+warnings.warn('check it was the same')
+
+# from diffeoplan.utils import memoize_instance as memoize
 
 __all__ = ['PlanReducer']
 
@@ -111,7 +119,7 @@ class PlanReducer(object):
         return min(list(self._inverse_for[action]))
     
     
-    @memoize
+    @dp_memoize_instance 
     @contract(plan='tuple', returns='tuple')
     def get_canonical(self, plan):
         def log(s):

@@ -3,6 +3,8 @@ import itertools
 from diffeo2dds.model.diffeo_system import DiffeoSystem
 from contracts import contract
 from diffeoplan.library.algo.generic_graph_planner import GenericGraphPlanner
+from diffeoplan.library.analysis.structure.diffeo_structure import DiffeoStructure
+from diffeoplan.library.analysis.structure.plan_reducer import PlanReducer
 
 __all__ = ['InformedPlanner']
 

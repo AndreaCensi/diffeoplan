@@ -1,9 +1,12 @@
-from . import np, contract
+from contracts import contract
+from diffeo2d import FlatStructure
 from geometry.utils import assert_allclose
+import numpy as np
+from diffeo2dds.model.uncertain_image import UncertainImageDistance
 
-from diffeo2d  import FlatStructure
+__all__ = ['DistanceNeighborEff']
 
-class DistanceNeighborEff():
+class DistanceNeighborEff(UncertainImageDistance):
     """ A more efficient version. """
     
     @contract(size='seq[2](int)', neighborarea='seq[2](int)')

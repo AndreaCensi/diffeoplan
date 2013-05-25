@@ -9,19 +9,15 @@ from diffeoplan import logger
 from diffeoplan.library.analysis.covering import (get_nodes_distance_matrix,
     edges_type_to_color, plot_3d_graph, get_embedding_mds, plot_2d_graph)
 from diffeoplan.utils import WithInternalLog
-from diffeoplan.utils.memoize_limits import memoize_limited
 from ggs import draw_node_graph, GenericGraphSearch
 from reprep import Report, MIME_PNG
 import numpy as np
 import os
 import random
+from diffeoplan.library import dp_memoize_instance
 
-__all__ = ['dp_memoize_instance', 'DiffeoCover']
+__all__ = ['DiffeoCover']
 
-def dp_memoize_instance(f):
-    memoize = memoize_limited(max_size=None, max_mem_MB=100)
-    return memoize(f)
-        
 
 class DiffeoCover(GenericGraphSearch, WithInternalLog):
     

@@ -1,3 +1,4 @@
+from diffeoplan.utils import WithMemoizeCache, memoize_limited
 
 __all__ = ['dp_memoize_instance', 'Memoized']
 
@@ -27,7 +28,7 @@ def dp_memoize_instance(f):
         In the future we will have a smarter strategy.
     """
      
-    memoize = memoize_limited(max_size=None, max_mem_MB=25)
+    memoize = memoize_limited(max_size=None, max_mem_MB=100)
     return memoize(f)
     
     

@@ -1,18 +1,16 @@
+from .bench import run_planning, run_planning_stats
+from .tables import results2stats_dict, jobs_tables
+from .visualization import visualize_result
 from collections import defaultdict
 from compmake import comp, comp_stage_job_id
 from compmake.ui.user_utils import comp_store
-from diffeo2dds.configuration.config_master import get_conftools_discdds
-from diffeo2dds.model.uncertain_image import UncertainImage
-from diffeoplan.configuration.master import (get_conftools_testcases,
-    get_conftools_planning_algos)
+from contracts import contract
+from diffeo2dds import UncertainImage, get_conftools_discdds
+from diffeoplan import get_conftools_testcases, get_conftools_planning_algos
 from quickapp import ReportManager
 from reprep import Report
 from reprep.report_utils import StoreResults
 import warnings
-from diffeoplan.programs.bench.bench import run_planning, run_planning_stats
-from diffeoplan.programs.bench.tables import results2stats_dict, jobs_tables
-from contracts import contract
-from diffeoplan.programs.bench.visualization import visualize_result
 
 
 def create_bench_jobs(config, algos, testcases, outdir):

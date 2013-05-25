@@ -1,7 +1,10 @@
-from . import  contract
-from diffeoplan.library import TestCase, UncertainImage
+from contracts import contract
+from diffeo2dds import UncertainImage
+from diffeoplan import TestCase
 from procgraph_pil import resize
 
+
+__all__ = ['discdds_make_test_case', 'discdds_make_test_cases']
 
 def discdds_make_test_cases(config, outdir, id_discdds,
                             id_image, num_cases, plan_length):

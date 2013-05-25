@@ -1,5 +1,3 @@
-
-from diffeoplan import logger
 from compmake import (batch_command, compmake_console, comp, read_rc_files,
     use_filesystem)
 from itertools import chain, starmap, islice, cycle
@@ -9,7 +7,7 @@ from reprep.report_utils import StoreResults
 import numpy as np
 import os
 
-@declare_command('uncert', 'uncert  dds <stream1> [...]')
+# @declare_command('uncert', 'uncert  dds <stream1> [...]')
 def uncert(config, parser):  # @UnusedVariable
     parser.add_option("-s", "--streams", help="Which streams to use.",
                       default="*")

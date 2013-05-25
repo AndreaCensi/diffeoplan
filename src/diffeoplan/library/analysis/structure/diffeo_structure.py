@@ -1,9 +1,9 @@
-
+from .plan_reducer import PlanReducer
 from contracts import contract
 from diffeo2d.visualization import (diffeo_to_rgb_norm, diffeo_to_rgb_angle,
     scalaruncertainty2rgb)
 from diffeo2dds.model import DiffeoAction, plans_of_max_length
-from diffeo2s.utils.matrices import iterate_indices
+from diffeo2s.utils import iterate_indices
 from reprep.plot_utils import x_axis_extra_space
 import numpy as np
 

@@ -2,6 +2,7 @@ from .diffeo_tree_search_image import DiffeoTreeSearchImage
 from contracts import contract
 from functools import partial
 import numpy as np
+from diffeoplan.library import dp_memoize_instance
 
 
 __all__ = ['DiffeoTreeSearchImageGreedyTree']
@@ -21,7 +22,7 @@ class DiffeoTreeSearchImageGreedyTree(DiffeoTreeSearchImage):
         """ Sets the other tree. """
         self.other_tree = other_tree
         
-    @memoize_instance
+    @dp_memoize_instance
     def distance_to_other_tree_node(self, node, node_other):
         '''
             Computes the distance between a node and the node in another tree.

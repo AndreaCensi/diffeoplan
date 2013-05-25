@@ -1,8 +1,7 @@
-from . import DiffeoTreeSearch, contract, dp_memoize_instance
 from diffeo2dds.model.uncertain_image import UncertainImage
-import numpy as np 
 from contracts import contract
-from diffeoplan import logger
+from .diffeo_tree_search import DiffeoTreeSearch
+from diffeoplan.library.memoize_strategy import dp_memoize_instance
 
 
 __all__ = ['DiffeoTreeSearchImage']

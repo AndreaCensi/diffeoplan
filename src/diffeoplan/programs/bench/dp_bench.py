@@ -1,12 +1,10 @@
-from . import create_bench_jobs
-from .. import declare_command, logger
 from compmake import (batch_command, compmake_console, use_filesystem,
     read_rc_files)
 import os
 
-@declare_command('bench',
-                 'bench -a <algorithms> -t <testcases>')
-def dp_bench_main(config, parser): #@UnusedVariable
+# @declare_command('bench',
+#                  'bench -a <algorithms> -t <testcases>')
+def dp_bench_main(config, parser):  # @UnusedVariable
     """ Runs a set of planning experiments. """
     parser.add_option("-a", "--algorithms", default='*',
                       help="Comma-separated list of algorithms. Can use *.")

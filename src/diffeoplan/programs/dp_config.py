@@ -2,8 +2,14 @@ from diffeoplan.programs.main import DP
 from quickapp.quick_app_base import QuickAppBase
 from diffeoplan.configuration.master import get_dp_config
 
+__all__ = ['DPShowConfig']
+
+
 class DPShowConfig(DP.get_sub(), QuickAppBase):
+    """ Shows the configuration """
     
+    cmd = 'config'
+        
     def define_program_options(self, params):
         params.add_flag('verbose')
         params.add_string('type', help="Show only type t objects.",

@@ -13,6 +13,7 @@ from diffeoplan.interfaces.planning_result import PlanningResult
 from diffeo2dds.visualization.guess import guess_state_space
 from diffeo2dds.model.diffeo_action import DiffeoAction
 from diffeoplan.library.algo.tree_connector import Connector
+from diffeoplan.library.analysis.structure.plan_reducer import PlanReducer
 
 __all__ = ['GenericGraphPlanner']
  

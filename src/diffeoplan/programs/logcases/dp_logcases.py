@@ -1,11 +1,8 @@
-from . import logger, make_logcases
-from .. import declare_command
-from diffeoplan.utils import UserError
 import os
 
 
-@declare_command('logcases',
-                 'logcases -s <stream> --dds <id_discdds> -n <number> -d <delay>')
+# @declare_command('logcases',
+#                  'logcases -s <stream> --dds <id_discdds> -n <number> -d <delay>')
 def dp_logcases_main(config, parser):
     """ Creates planning test cases from log files. """
     parser.add_option('-n', help="Number of test cases.", default=1, type='int')

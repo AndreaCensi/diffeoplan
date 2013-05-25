@@ -7,6 +7,8 @@ from reprep.report_utils import (FunctionWithDescription, WithDescription,
 from reprep.utils import frozendict2
 import itertools
 from diffeo2dds.model.plan_utils import plan_friendly
+from diffeoplan.library.distances.distance_norm import DistanceNorm
+from diffeoplan.library.distances.distance_norm_weighted import DistanceNormWeighted
 
 __all__ = ['Stats']
 

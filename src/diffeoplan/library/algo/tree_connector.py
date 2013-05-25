@@ -1,5 +1,5 @@
 from diffeo2s.utils import construct_matrix_iterators
-from diffeoplan.library.algo.memoize_strategy import Memoized
+from diffeoplan.library import Memoized
 from diffeoplan.utils import WithInternalLog, assert_allclose
 import itertools
 import numpy as np

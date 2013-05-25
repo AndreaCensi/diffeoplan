@@ -1,64 +1,52 @@
-from .. import declare_command, logger
 from boot_agents.utils import scale_score
 from bootstrapping_olympics.utils import natsorted
-from compmake import (batch_command, compmake_console, comp, read_rc_files,
-    use_filesystem)
-from diffeoplan.library import UncertainImage
-from diffeoplan.programs.logcases import iterate_testcases
+from contracts import contract
+from diffeo2dds import get_conftools_uncertain_image_distances
+from diffeo2dds.model.uncertain_image import UncertainImage
+from diffeo2dds_learn import get_conftools_streams
+from diffeoplan import logger
+from diffeoplan.programs import DP
 from geometry.utils import assert_allclose
 from itertools import chain, starmap, islice, cycle, ifilterfalse
+from quickapp import CompmakeContext, QuickApp
 from reprep import Report
 from reprep.plot_utils import ieee_spines
 from reprep.report_utils import StoreResults
-from quickapp import ReportManager
 import numpy as np
-import os
 
-@declare_command('dist-stats',
-                 'dist-stats -d <distances> -s  <streams> ... ')
-def dp_dist_stats(config, parser): #@UnusedVariable
+__all__ = ['DPDistStats']
+
+class DPDistStats(DP.get_sub(), QuickApp):
     """ Computes statistics for images distances for different plan steps. """
-    parser.add_option("-o", "--output", default='out/dp-dist-stats',
-                      help="Output directory")
 
-    parser.add_option("-d", "--distances", default='*',
-                      help="Comma-separated list of distances. Can use *.")
-    parser.add_option("-s", "--streams", default='*',
-                      help="Comma-separated list of streams. Can use *.")
-    
-    parser.add_option("-r", "--repeat", default=1, type='int',
-                       help="Repeat many times.")
+    cmd = 'dist-fps'
+    usage = 'dist-fps  -d <distances> -t <testcases>'
 
-    parser.add_option("-c", "--command",
-                      help="Command to pass to compmake for batch mode")
-    
-    options = parser.parse_options()
-    
-    distances = natsorted(config.distances.expand_names(options.distances))
-    streams = natsorted(config.streams.expand_names(options.streams))
+    def define_options(self, params):
+        params.add_string('distances', default='*', short='d',
+                          help="Comma-separated list of distances. Can use *.")
+        params.add_string('streams', default='*', short='t',
+                          help="Comma-separated list of streams. Can use *.")
+        params.add_int('repeat', default=1,
+                          help="Repeat many times")
+        
+    def define_jobs_context(self, context):
+        
+        distances_library = get_conftools_uncertain_image_distances()
+        distances = distances_library.expand_names(self.options.distances)
+        distances = natsorted(distances)
+        
+        streams_library = get_conftools_streams()
+        streams = streams_library.expand_names(self.options.streams)
+        streams = natsorted(streams)
+        # id_comb = ','.join(streams) + '-' + ','.join(distances)
 
-    logger.info('Using distances: %s' % distances)
-    logger.info('Using streams: %s' % streams)
-    
-    id_comb = ','.join(streams) + '-' + ','.join(distances)
-    outdir = os.path.join(options.output, id_comb)
-    storage = os.path.join(outdir, 'compmake')
-    use_filesystem(storage)
-    read_rc_files()
-    
-    rm = ReportManager(os.path.join(outdir, "reports"))
-    
-    create_diststats_jobs(config=config, distances=distances, streams=streams,
-                           rm=rm, maxd=10)
-    rm.create_index_job()
-
-    if options.command:
-        return batch_command(options.command)
-    else:
-        compmake_console()
-        return 0
-    
-def create_diststats_jobs(config, distances, streams, rm, maxd):
+        create_diststats_jobs(context, distances=distances, streams=streams, maxd=10)
+       
+       
+@contract(context=CompmakeContext, distances='list(str)', streams='list(str)',
+          maxd='int,>=1')
+def create_diststats_jobs(context, distances, streams, maxd):
     # Compmake storage for results
     store = StoreResults()
 
@@ -70,20 +58,20 @@ def create_diststats_jobs(config, distances, streams, rm, maxd):
                            stream=id_stream)
                 job_id = '%s-log%s-delta%s' % (id_distance, i, delta)
                 
-                store[key] = comp(compute_dist_stats, config, id_distance,
+                store[key] = context.comp_config(compute_dist_stats, id_distance,
                                   id_stream, delta,
                                   job_id=job_id)
     
     
     for id_distance in distances:
         subset = store.select(id_distance=id_distance)
-        stats = comp(compute_statistics, subset)
-        report = comp(report_statistics, id_distance, stats)
-        rm.add(report, 'bydistance', id_distance=id_distance)
+        stats = context.comp(compute_statistics, subset)
+        report = context.comp(report_statistics, id_distance, stats)
+        context.add_report(report, 'bydistance', id_distance=id_distance)
 
     subsets = create_subsets(distances)
     
-    job_report(subsets, store, rm)
+    job_report(context, subsets, store)
 
     
 def create_subsets(distances):
@@ -99,17 +87,18 @@ def create_subsets(distances):
         subsets[initial] = sorted(which)
     return subsets
 
-def job_report(subsets, store, rm):
+@contract(context=CompmakeContext)
+def job_report(context, subsets, store):
     for id_subset, which in subsets.items():
         logger.info('%s = %s' % (id_subset, which))
         subset = store.select(lambda x: x['id_distance'] in which)
         logger.info('selected %s' % len(subset))
-        substats = comp(compute_statistics, subset, job_id='%s-s' % id_subset)
-        report = comp(report_statistics_all, id_subset, substats)
-        rm.add(report, 'main', subset=id_subset)
+        substats = context.comp(compute_statistics, subset, job_id='%s-s' % id_subset)
+        report = context.comp(report_statistics_all, id_subset, substats)
+        context.add_report(report, 'main', subset=id_subset)
             
     
-#dp_predstats_fig = dict(figsize=(3.3, 1.5))
+# dp_predstats_fig = dict(figsize=(3.3, 1.5))
 dp_predstats_fig = dict(figsize=(6.6, 3))
         
 def report_statistics_all(id_sub, stats, perc=10, W=0.2):
@@ -209,7 +198,7 @@ def report_statistics(id_sub, stats):
 
 def fancy_error_display(pylab, xs, ys, color, perc=10, label=None):
     pylab.scatter(xs, ys, s=20, c=color, edgecolors='none', alpha=0.03,
-                  rasterized=True) # 0.01
+                  rasterized=True)  # 0.01
 
     for i, x in enumerate(set(xs)):
         which = xs == x

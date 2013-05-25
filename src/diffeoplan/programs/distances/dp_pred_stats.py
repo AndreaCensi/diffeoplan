@@ -1,81 +1,59 @@
-from .. import declare_command, logger
 from boot_agents.utils import scale_score
-from compmake import (batch_command, compmake_console, comp, read_rc_files,
-    use_filesystem)
-from diffeoplan.library import UncertainImage
-from diffeoplan.programs.distances import (fancy_error_display, legend_put_below,
-    create_subsets)
-from diffeoplan.programs.logcases import iterate_testcases
-from diffeoplan.utils import UserError
+from contracts import contract
+from diffeo2dds import (UncertainImage, get_conftools_discdds,
+    get_conftools_uncertain_image_distances)
+from diffeo2dds_learn import get_conftools_streams
+from diffeoplan.programs.distances.dp_dist_stats import (dp_predstats_fig,
+    create_subsets, fancy_error_display, legend_put_below)
+from diffeoplan.programs.main import DP
 from geometry.utils import assert_allclose
 from itertools import chain, starmap, islice, cycle
+from quickapp import CompmakeContext, iterate_context_names
+from quickapp.quick_app import QuickApp
 from reprep import Report
 from reprep.plot_utils import ieee_spines
 from reprep.report_utils import StoreResults
-from quickapp import ReportManager
 import numpy as np
-import os
-from diffeoplan.programs.distances.dp_dist_stats import dp_predstats_fig
+import warnings
+warnings.warn('dependency on boot_agents')
 
 
-@declare_command('pred-stats',
-                 'pred-stats -d <distances> -s <streams> --dds discdds')
-def dp_predstats_main(config, parser): 
+__all__ = ['DPPredStats']
+
+
+class DPPredStats(DP.get_sub(), QuickApp):
     """ Computes prediction performances for different DDS. """
-    parser.add_option("-o", "--output", default='out/dp-pred-stats',
-                      help="Output directory")
 
-    parser.add_option("-d", "--distances", default='*',
-                      help="Comma-separated list of distances. Can use *.")
-    
-    parser.add_option("-S", "--dds",
-                       help="Comma-separated list of diffeosystems.")
+    cmd = 'pred-stats'
+    usage = 'pred-stats -d <distances> -s <streams> --dds discdds'
 
-    parser.add_option("-s", "--streams",
-                       help="Comma-separated list of streams.")
-
-    parser.add_option("-c", "--command",
-                      help="Command to pass to compmake for batch mode")
-    
-    options = parser.parse_options()
-    
-    
-    if not options.streams:
-        msg = 'Please specify streams using -s.'
-        raise UserError(msg)
-    
-    if not options.dds:
-        msg = 'Please specify which discdds to use.'
-        raise UserError(msg)
-    
-    distances = config.distances.expand_names(options.distances)
-    streams = config.streams.expand_names(options.streams)
-    dds = config.streams.expand_names(options.dds)
-    
-    logger.info('Using distances: %s' % distances)
-    logger.info('Using streams: %s' % streams)
-    logger.info('Using discdds: %s' % dds)
-
-    outdir = '%s/%s' % (options.output, options.dds)
-    storage = os.path.join(outdir, 'compmake')
-    use_filesystem(storage)
-    read_rc_files()
-    
-    rm = ReportManager(os.path.join(outdir, "reports"))
-
-    for id_discdds in dds:    
-        create_predstats_jobs(config=config, distances=distances,
-                          id_discdds=id_discdds,
-                          streams=streams, rm=rm, maxd=10)
-    rm.create_index_job()
-
-    if options.command:
-        return batch_command(options.command)
-    else:
-        compmake_console()
-        return 0
-    
-def create_predstats_jobs(config, distances, streams, id_discdds, rm, maxd):
+    def define_options(self, params):
+        params.add_string('distances', default='*', short='d',
+                          help="Comma-separated list of distances.")
+        params.add_string('dds', short='S',
+                          help="Comma-separated list of diffeosystems.")
+        params.add_string('streams', default='*', short='s',
+                          help="Comma-separated list of streams. Can use *.")
+        
+    def define_jobs_context(self, context):
+        distances_library = get_conftools_uncertain_image_distances()
+        distances = distances_library.expand_names(self.options.distances)
+        
+        streams_library = get_conftools_streams()
+        streams = streams_library.expand_names(self.options.streams)
+       
+        discdds_library = get_conftools_discdds()
+        discdds = discdds_library.expand_names(self.options.dds)
+       
+        for c, id_discdds in iterate_context_names(context, discdds):
+            create_predstats_jobs(context=c, distances=distances,
+                              id_discdds=id_discdds,
+                              streams=streams, maxd=10)
+        
+        
+@contract(context=CompmakeContext, distances='list(str)',
+          streams='list(str)', id_discdds='str', maxd='int,>=1')
+def create_predstats_jobs(context, distances, streams, id_discdds, maxd):
     # Compmake storage for results
     store = StoreResults()
     
@@ -87,22 +65,23 @@ def create_predstats_jobs(config, distances, streams, id_discdds, rm, maxd):
             key = dict(delta=delta, id_stream=id_stream, id_discdds=id_discdds)
             job_id = 'pred-%s-log%s-delta%s' % (id_discdds, i, delta)
             
-            store[key] = comp(compute_predstats,
-                              config, id_discdds,
-                              id_stream, delta, distances,
-                              job_id=job_id)
+            store[key] = context.comp_config(compute_predstats,
+                                            id_discdds,
+                                            id_stream, delta, distances,
+                                            job_id=job_id)
      
     subsets = create_subsets(distances)
-    job_report_one(subsets, id_discdds, store, rm)
+    job_report_one(context, subsets, id_discdds, store)
     
 
-def job_report_one(subsets, id_discdds, store, rm):
-    records = comp(make_records, store)
+def job_report_one(context, subsets, id_discdds, store):
+    records = context.comp(make_records, store)
     for id_subset, distances in subsets.items():
         job_id = 'report_predstats-%s-%s' % (id_discdds, id_subset)    
-        report = comp(report_predstats, id_discdds, id_subset, distances, records,
-                      job_id=job_id)
-        rm.add(report, 'main', id_discdds=id_discdds, subset=id_subset)
+        report = context.comp_config(report_predstats,
+                                     id_discdds, id_subset, distances, records,
+                                     job_id=job_id)
+        context.add_report(report, 'main', id_discdds=id_discdds, subset=id_subset)
             
             
             

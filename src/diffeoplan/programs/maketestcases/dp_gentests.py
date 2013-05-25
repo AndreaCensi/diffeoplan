@@ -1,10 +1,10 @@
-from .. import declare_command
-from . import discdds_make_test_cases
+# from . import discdds_make_test_cases
+from diffeoplan.programs.maketestcases.maketest import discdds_make_test_cases
 
 
-@declare_command('gentests',
-                 'gentests -n <number> -l <plan length> [-i <image>] [<discdds1> <discdds2> ...]')
-def maketestcases_display_main(config, parser): #@UnusedVariable
+# @declare_command('gentests',
+#                  'gentests -n <number> -l <plan length> [-i <image>] [<discdds1> <discdds2> ...]')
+def maketestcases_display_main(config, parser):  # @UnusedVariable
     """ Creates synthetic test cases using the learned DDS. """
     parser.add_option("-i", "--id_image", help="ID image.", default='lena')
     parser.add_option("-n", help="Number of test cases.", default=1, type='int')

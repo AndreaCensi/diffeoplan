@@ -1,7 +1,7 @@
 from contracts import contract
 from diffeoplan.library.algo.diffeo_tree_search_image import DiffeoTreeSearchImage
 from diffeo2dds.model.uncertain_image import UncertainImage
-from diffeoplan.library.algo.memoize_strategy import dp_memoize_instance
+from diffeoplan.library import dp_memoize_instance
 
 __all__ = ['DiffeoTreeSearchImageGreedy']
 

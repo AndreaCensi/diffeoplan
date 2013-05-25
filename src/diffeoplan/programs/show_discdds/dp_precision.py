@@ -1,23 +1,19 @@
-'''
-Created on Feb 27, 2013
-
-@author: adam
-'''
-import os
 from compmake import (batch_command, compmake_console, comp, read_rc_files,
     use_filesystem)
-from diffeoplan.programs.distances.dp_dist_stats import fancy_error_display, \
-    legend_put_below
+from diffeoplan.programs.distances.dp_dist_stats import (fancy_error_display,
+    legend_put_below)
 from diffeoplan.programs.distances.dp_pred_stats import compute_predstats
-from diffeoplan.programs.utils import declare_command
 from itertools import chain, starmap, islice, cycle
+from quickapp import ReportManager
 from reprep import Report
 from reprep.report_utils import StoreResults
-from quickapp import ReportManager
-import numpy as np
 import itertools
+import numpy as np
+import os
+# from bootstrapping_olympics.programs.manager.command_line.commands_list import declare_command
 
-@declare_command('precision', 'precision  ...') #TODO:
+
+# @declare_command('precision', 'precision  ...')  # TODO:
 def uncert(config, parser):
     parser.add_option("-S", "--dds", help="DDS sytem .")
     parser.add_option("-c", "--command", \
@@ -160,7 +156,7 @@ def report_stats(records, id_ddss, id_streams, id_distances):
             ax = pylab.subplot(111)
             
             which0 = (records['id_discdds'] == id_ddss[0])
-            _ = records[which0]['delta'] # delta0
+            _ = records[which0]['delta']  # delta0
             distance0 = records[which0][id_distance]
             for i, id_dds in enumerate(id_ddss[1:]):
                 which = (records['id_discdds'] == id_dds).astype('int')

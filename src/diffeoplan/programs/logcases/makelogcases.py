@@ -1,7 +1,9 @@
-from . import np, contract
+from contracts import contract
+import numpy as np
 from collections import deque
-from diffeoplan.library import LogItem, TestCase, UncertainImage
+from diffeoplan.library import TestCase, UncertainImage
 from itertools import ifilter
+from diffeo2dds_learn.interface.streams import LogItem
     
     
 @contract(delta='int,>=1', n='int,>=1')

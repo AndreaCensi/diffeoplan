@@ -9,8 +9,8 @@ from compmake import (batch_command, compmake_console, comp, use_filesystem,
 import copy
 from diffeo2dds.model.writing import ds_dump
 
-@declare_command('idealize-uncert',
-                 'idealize-uncert -S discdds -o [output and input folder]')
+# @declare_command('idealize-uncert',
+#                  'idealize-uncert -S discdds -o [output and input folder]')
 def idealize_uncert(config, parser):
     '''
     Assumes a constant displacement over the whole sensor domain

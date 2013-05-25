@@ -1,10 +1,8 @@
-from . import declare_command
-from .. import write_report_files
 from reprep import Report
 import os
 
-@declare_command('show-tc', 'show-tc [-o <dir>] [<tc1> <tc2> ...]')
-def dp_show_tc_main(config, parser): #@UnusedVariable
+# @declare_command('show-tc', 'show-tc [-o <dir>] [<tc1> <tc2> ...]')
+def dp_show_tc_main(config, parser):  # @UnusedVariable
     """ Creates a report for test cases. """ 
     parser.add_option("-o", "--output", help="Output directory",
                       default='out/dp-show-tc/')

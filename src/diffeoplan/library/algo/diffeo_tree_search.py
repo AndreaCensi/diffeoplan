@@ -7,7 +7,8 @@ from diffeo2dds.model.diffeo_action import DiffeoAction
 from diffeo2dds.visualization.guess import guess_state_space
 import numpy as np 
 from contracts import contract
-from diffeoplan.library.algo.memoize_strategy import Memoized
+from diffeoplan.library import Memoized
+from diffeoplan.library.analysis.structure.plan_reducer import PlanReducer
 
 
 __all__ = ['DiffeoTreeSearch']

@@ -2,11 +2,12 @@ import numpy as np
 from contracts import contract
 from diffeo2dds import UncertainImageDistance, UncertainImage
 from .distance_norm import element_by_element_norm
+from diffeoplan.library.distances.distance_norm import DistanceNorm
 
 __all__ = ['DistanceNormWeighted']
 
 
-class DistanceNormWeighted(UncertainImageDistance):
+class DistanceNormWeighted(DistanceNorm):
     """ 
         Like DistanceNorm but we only count the percentage
         that they have in common.

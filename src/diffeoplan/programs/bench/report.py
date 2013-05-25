@@ -1,4 +1,5 @@
-from . import contract, np
+from contracts import contract
+import numpy as np
 from reprep import Report
 
 def report_for_stats(short, stats, desc):
@@ -8,7 +9,7 @@ def report_for_stats(short, stats, desc):
     
 
 def report_stats(r, stats):
-    if False: # need to update, like in tables.py
+    if False:  # need to update, like in tables.py
         sub = r.section('init_time', caption='Initialization time')
         values = [s['init_time'] for s in stats]
         report_values(sub, values)

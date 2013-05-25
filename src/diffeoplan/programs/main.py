@@ -1,25 +1,9 @@
 from quickapp.quick_multi_app import QuickMultiCmdApp
-from conf_tools.master import GlobalConfig
-
-
-usage_pattern = """
-
-    ${cmd} [global options]  <command>  [command options]
-
-
-Available commands:
-
-${commands_list}
-
-Use: `${cmd}  <command> -h' to get more information about that command.  
-"""
+from conf_tools import GlobalConfig
 
 
 class DP(QuickMultiCmdApp):
-    """ 
-    
-        Main program for learning symbolic diffeomorphisms.
-        
+    """         
         See the manual at 
 
             http://github.com/AndreaCensi/surf12adam/wiki/
@@ -32,15 +16,16 @@ class DP(QuickMultiCmdApp):
         options.add_flag('dummy', help='workaround for a bug')
         options.add_string('directory', short='d',
                                 help='Configuration directory',
-                               default='default:.')
+                               default='default')
   
     def initial_setup(self):
         options = self.get_options()
         # Load configurations for all modules
+        self.info('loading config: %r' % options.directory)
         GlobalConfig.global_load_dir(options.directory)
             
 dpmain = DP.get_sys_main()    
-        
+
 
 # 
 #     
@@ -113,8 +98,4 @@ dpmain = DP.get_sys_main()
 #     return wrap_script_entry_point(dp, logger,
 #                         exceptions_no_traceback=exceptions_no_traceback)
 
-
-
-if __name__ == '__main__':
-    dpmain()
 
