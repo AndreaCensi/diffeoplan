@@ -13,22 +13,23 @@ from reprep import Report
 from reprep.plot_utils import ieee_spines
 from reprep.report_utils import StoreResults
 import numpy as np
+from diffeoplan.programs.logcases.makelogcases import iterate_testcases
 
 __all__ = ['DPDistStats']
 
 class DPDistStats(DP.get_sub(), QuickApp):
     """ Computes statistics for images distances for different plan steps. """
 
-    cmd = 'dist-fps'
-    usage = 'dist-fps  -d <distances> -t <testcases>'
+    cmd = 'dist-stats'
+    usage = 'dist-stats  -d <distances> -t <testcases>'
 
     def define_options(self, params):
         params.add_string('distances', default='*', short='d',
                           help="Comma-separated list of distances. Can use *.")
         params.add_string('streams', default='*', short='t',
                           help="Comma-separated list of streams. Can use *.")
-        params.add_int('repeat', default=1,
-                          help="Repeat many times")
+        params.add_int('maxd', default=10,
+                          help="Maximum interval")
         
     def define_jobs_context(self, context):
         
@@ -41,7 +42,8 @@ class DPDistStats(DP.get_sub(), QuickApp):
         streams = natsorted(streams)
         # id_comb = ','.join(streams) + '-' + ','.join(distances)
 
-        create_diststats_jobs(context, distances=distances, streams=streams, maxd=10)
+        create_diststats_jobs(context, distances=distances, streams=streams,
+                              maxd=self.options.maxd)
        
        
 @contract(context=CompmakeContext, distances='list(str)', streams='list(str)',
@@ -251,9 +253,10 @@ def compute_statistics(results):
     stats['records'] = records
     return stats
 
-def compute_dist_stats(config, id_distance, id_stream, delta):
-    distance = config.distances.instance(id_distance)
-    stream = config.streams.instance(id_stream)
+def compute_dist_stats(id_distance, id_stream, delta):
+    distances_library = get_conftools_uncertain_image_distances()
+    distance = distances_library.instance(id_distance)
+    stream = get_conftools_streams().instance(id_stream)
     it = stream.read_all()
     results = []
     for logitem in iterate_testcases(it, delta):

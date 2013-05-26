@@ -1,56 +1,32 @@
-from compmake import (batch_command, compmake_console, use_filesystem,
-    comp_prefix, read_rc_files)
-from pprint import pformat
-import os
-from diffeoplan import logger
 from .bench_jobs import create_bench_jobs
+from diffeoplan.programs.main import DP
+from quickapp.quick_app import QuickApp
+from diffeoplan.configuration.master import get_conftools_batches, get_dp_config
+from quickapp import iterate_context_names
 
-# @declare_command('batch',
-#                  'batch <sets> -c command')
-def dp_batch_main(config, parser):
+
+__all__ = ['DPBatch']
+
+
+class DPBatch(DP.get_sub(), QuickApp):
     """ Runs batch planning experiments from batch configuration files. """
-    parser.add_option("-o", "--output", default='out/dp-batch',
-                      help="Output directory")
 
-    parser.add_option("-c", "--command",
-                      help="Command to pass to compmake for batch mode")
-    
-    options, which = parser.parse()
-    
-    if not which:
-        todo = config.sets.keys()
-        id_comb = 'all'  
-    else:
-        todo = config.sets.expand_names(which)
-        id_comb = "+".join(sorted(todo))
+    cmd = 'batch'
+    usage = 'batch --sets=<sets>'
+
+    def define_options(self, params):
+        params.add_string('batches', default='*',
+                          help="Comma-separated list of batches.")
         
-    logger.info('Batch sets to do: %s' % todo)
-    
-    outdir = os.path.join(options.output, 'set-%s' % id_comb)
-    
-    # Compmake storage for results
-    storage = os.path.join(outdir, 'compmake')
-    use_filesystem(storage)
-    read_rc_files()
-    
-    for id_set in todo:
-        logger.info('Instantiating batch set  %s' % id_set)
-        spec = config.sets[id_set]
+    def define_jobs_context(self, context):
+        batches_library = get_conftools_batches()
+        batches = batches_library.expand_names(self.options.batches)
         
-        try:            
+        config = get_dp_config()
+        for c, id_batch in iterate_context_names(context, batches):
+            spec = batches_library[id_batch]
             algos = config.algos.expand_names(spec['algorithms']) 
             testcases = config.testcases.expand_names(spec['testcases']) 
-            comp_prefix('%s' % id_set)
-            b_outdir = os.path.join(outdir, id_set)
-            create_bench_jobs(config=config, algos=algos,
-                              testcases=testcases, outdir=b_outdir)
-        except:
-            logger.error('Error while instantiating batch\n%s' % pformat(spec))
-            raise
+            create_bench_jobs(c, algos=algos, testcases=testcases)
         
-    if options.command:
-        return batch_command(options.command)
-    else:
-        compmake_console()
-        return 0
-    
+

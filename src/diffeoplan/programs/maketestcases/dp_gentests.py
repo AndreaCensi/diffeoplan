@@ -1,4 +1,3 @@
-# from . import discdds_make_test_cases
 from diffeoplan.programs.maketestcases.maketest import discdds_make_test_cases
 
 

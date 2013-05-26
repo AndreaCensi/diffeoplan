@@ -1,11 +1,11 @@
 from contracts import contract
-from diffeo2d.diffeomorphism2d import Diffeomorphism2D
-from diffeo2dds import DiffeoAction, plan_friendly
-from diffeo2dds.library.diffeo_action_distances.diffeo_action_distances import (
-    diffeoaction_distance_L2_infow)
+from diffeo2d import Diffeomorphism2D
+from diffeo2dds import DiffeoAction, plan_friendly, DiffeoActionDistance
+from diffeo2dds.library import diffeoaction_distance_L2_infow
 from diffeo2dds.visualization import guess_state_space
-from diffeo2s.utils import construct_matrix
+from diffeo2s.utils import construct_distance_matrix
 from diffeoplan import logger
+from diffeoplan.library import dp_memoize_instance
 from diffeoplan.library.analysis.covering import (get_nodes_distance_matrix,
     edges_type_to_color, plot_3d_graph, get_embedding_mds, plot_2d_graph)
 from diffeoplan.utils import WithInternalLog
@@ -14,7 +14,6 @@ from reprep import Report, MIME_PNG
 import numpy as np
 import os
 import random
-from diffeoplan.library import dp_memoize_instance
 
 __all__ = ['DiffeoCover']
 
@@ -222,8 +221,8 @@ class DiffeoCover(GenericGraphSearch, WithInternalLog):
                         label_func=nolabel,
                         color_func=color_func)
             
-
     @dp_memoize_instance
+    @contract(action_distance=DiffeoActionDistance)
     def plan_distance(self, p1, p2, action_distance):
         a1 = self.compute_action(p1)
         a2 = self.compute_action(p2)
@@ -234,11 +233,12 @@ class DiffeoCover(GenericGraphSearch, WithInternalLog):
         plans = sorted(plans, key=lambda x: len(x))
         return plans
     
+    @contract(returns='tuple(list, distance_matrix)', action_distance=DiffeoActionDistance)
     def get_distance_matrix(self, plans, action_distance):
         n = len(plans)
         D_ij = lambda i, j: self.plan_distance(plans[i], plans[j],
                                                action_distance)
-        D = construct_matrix((n, n), D_ij)
+        D = construct_distance_matrix((n, n), D_ij)
         return plans, D                         
         
     def set_edge_field_to_plan_distance(self, field_name, function):
@@ -251,10 +251,11 @@ class DiffeoCover(GenericGraphSearch, WithInternalLog):
                 for edge in self.G[plan1][plan2].values():
                     edge[field_name] = distance
     
-    @contract(returns='tuple(list, list(tuple(str, array[NxN])))')
+    @contract(returns='tuple(list, list(tuple(str, distance_matrix)))')
     def compute_distances(self):
-        """ Computes a bunch of distance measures. 
-            Returns plans, list of name, distance
+        """ 
+            Computes a bunch of distance measures. 
+            Returns (plans, list of (name, distance))
         """
         plans = self.get_plans_sorted()
         distances = []
@@ -265,7 +266,8 @@ class DiffeoCover(GenericGraphSearch, WithInternalLog):
         # plan-to-plan distance, but only on edge path
         function = lambda p1, p2: self.plan_distance(p1, p2, diffeoaction_distance_L2_infow)
         self.set_edge_field_to_plan_distance('L2_infow', function)
-        D_L2_infow_edges = get_nodes_distance_matrix(self.G, plans, 'L2_infow')
+        
+        D_L2_infow_edges = get_nodes_distance_matrix(self.G, plans, weight_field='L2_infow')
         
         D_pathlength = get_nodes_distance_matrix(self.G, plans)
         
@@ -284,7 +286,7 @@ class DiffeoCover(GenericGraphSearch, WithInternalLog):
             print name   
             self.draw_embedding(report.section(name), plans, D)
         
-    @contract(plans='seq(tuple)', D='array[NxN]')
+    @contract(plans='seq(tuple)', D='distance_matrix')
     def draw_embedding(self, report, plans, D):
         
         f = report.figure('distances')

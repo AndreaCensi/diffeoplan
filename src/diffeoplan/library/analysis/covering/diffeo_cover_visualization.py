@@ -82,18 +82,21 @@ def plot_2d_graph(pylab, G, plan2point, plan2color, edges2color=None, s=120):
     pylab.colorbar()
 
 
+@contract(returns='distance_matrix')
 def get_nodes_distance_matrix(G, nodelist, weight_field=None):
     n = len(nodelist)
     D = floyd_warshall_numpy(G, nodelist, weight=weight_field)
     assert_allclose(D.shape, (n, n))
     assert_allclose(np.isfinite(D), True)
     assert np.all(D >= 0)
+    assert np.all(D.diagonal() == 0)
+    
     # there was some strange bug. Keep this even if you don't understand why
     D = np.array(D, dtype='float64')
     return D
     
     
-@contract(plans='seq[N]', D='array[NxN]', ndim='K',
+@contract(plans='seq[N]', D='distance_matrix,array[NxN]', ndim='K',
           returns='dict(seq: array[K])')
 def get_embedding_mds(plans, D, ndim):
     """ Returns a dictionary plan -> position """

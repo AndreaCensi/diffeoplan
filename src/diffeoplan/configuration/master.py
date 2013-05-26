@@ -1,11 +1,11 @@
 from .checks import check_valid_set
-from conf_tools import (ConfigMaster, GenericCall, check_generic_code_desc,
-    ObjectSpec)
+from conf_tools import ConfigMaster, ObjectSpec
 from contracts import contract
 
 __all__ = ['get_dp_config',
            'get_conftools_planning_algos',
-           'get_conftools_testcases']
+           'get_conftools_testcases',
+           'get_conftools_batches']
 
 class DiffeoplanConfigMaster(ConfigMaster):
     def __init__(self):
@@ -21,7 +21,7 @@ class DiffeoplanConfigMaster(ConfigMaster):
         self.testcases = \
             self.add_class_generic('testcases', '*.tc.yaml', TestCase)
         
-        self.sets = self.add_class('sets', '*.batch.yaml', check_valid_set)
+        self.batches = self.add_class('batches', '*.batch.yaml', check_valid_set)
   
   
     def get_default_dir(self):
@@ -37,7 +37,12 @@ def get_conftools_planning_algos():
     """ Returns the object responsible for instancing UncertainImages. """
     return get_dp_config().algos
 
-contract(returns=ObjectSpec)
+@contract(returns=ObjectSpec)
 def get_conftools_testcases():
     """ Returns the object responsible for instancing UncertainImages. """
     return get_dp_config().testcases
+
+@contract(returns=ObjectSpec)
+def get_conftools_batches():
+    return get_dp_config().batches
+

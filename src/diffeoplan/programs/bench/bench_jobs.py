@@ -2,18 +2,17 @@ from .bench import run_planning, run_planning_stats
 from .tables import results2stats_dict, jobs_tables
 from .visualization import visualize_result
 from collections import defaultdict
-from compmake import comp, comp_stage_job_id
-from compmake.ui.user_utils import comp_store
+from compmake import comp_stage_job_id
 from contracts import contract
-from diffeo2dds import UncertainImage, get_conftools_discdds
-from diffeoplan import get_conftools_testcases, get_conftools_planning_algos
-from quickapp import ReportManager
+from diffeo2dds import get_conftools_discdds, get_conftools_uncertain_images
+from diffeoplan import (get_conftools_testcases, get_conftools_planning_algos,
+    get_dp_config)
 from reprep import Report
 from reprep.report_utils import StoreResults
 import warnings
 
 
-def create_bench_jobs(config, algos, testcases, outdir):
+def create_bench_jobs(context, algos, testcases):
     # dict(id_algo, id_tc, id_discdds, plan_length) => PlanningResults
     allplanning = StoreResults()
     # dict(id_algo, id_tc, id_discdds, plan_length) => resultstats
@@ -21,16 +20,14 @@ def create_bench_jobs(config, algos, testcases, outdir):
     # dict(id_algo, id_tc) => DiffeoPlanningAlgorithm
     algoinit = StoreResults()
     
-    rm = ReportManager(outdir)
-    
-    comp_store(config, job_id='config') 
+    config = get_dp_config()
     
     # Let's instantiate all test cases and sort them by discdds
     # so that we do only one initialization per algorithms
     id_discdds2testcases = defaultdict(lambda: {}) 
     alltc = {}  # id -> Promise TestCase
     for id_tc in testcases:
-        alltc[id_tc] = comp(instantiate_testcase, comp_store(config), id_tc)
+        alltc[id_tc] = context.comp(instantiate_testcase, id_tc)
         # Do it once, now, to get its dds
         tc1 = config.testcases.instance(id_tc) 
         id_discdds2testcases[tc1.id_discdds][id_tc] = tc1
@@ -39,7 +36,7 @@ def create_bench_jobs(config, algos, testcases, outdir):
     # as well so we want the generation to happen only once.
     discdds = {}  # id -> Promise DiffeoSystem
     for id_discdds in id_discdds2testcases: 
-        discdds[id_discdds] = comp(instantiate_discdds, comp_store(config), id_discdds)
+        discdds[id_discdds] = context.comp(instantiate_discdds, id_discdds)
         
     # for each algorithm
     for id_algo in algos:
@@ -50,8 +47,7 @@ def create_bench_jobs(config, algos, testcases, outdir):
             job_id = 'init-%s-%s' % (id_algo, id_discdds)
             
             # initialize the algorithm for that dynamics
-            algo = comp(init_algorithm, comp_store(config),
-                        id_algo, id_discdds, discdds[id_discdds], job_id=job_id)
+            algo = context.comp(init_algorithm, id_algo, id_discdds, discdds[id_discdds], job_id=job_id)
             algoinit[dict(id_algo=id_algo, id_discdds=id_discdds)] = algo
             
             # for each test case in that dynamics
@@ -59,11 +55,11 @@ def create_bench_jobs(config, algos, testcases, outdir):
                 
                 # run the planning
                 job_id = 'plan-%s-%s' % (id_algo, id_tc)
-                result = comp(run_planning, id_algo,
+                result = context.comp(run_planning, id_algo,
                               id_tc, alltc[id_tc], algo, job_id=job_id)
                 
                 # compute statistics
-                result_stats = comp(run_planning_stats, result,
+                result_stats = context.comp(run_planning_stats, result,
                                     dds, alltc[id_tc],
                                     job_id=job_id + '-stats') 
     
@@ -73,19 +69,18 @@ def create_bench_jobs(config, algos, testcases, outdir):
                 allruns[attrs] = result_stats
                 allplanning[attrs] = result
     
-    jobs_report_algo_init(config, rm, algoinit)
-    jobs_report_tc(config, rm, testcases, alltc)
-    jobs_report_dds(config, rm, discdds)
+    jobs_report_algo_init(context, algoinit)
+    jobs_report_tc(context, testcases, alltc)
+    jobs_report_dds(context, discdds)
 
     allstats = StoreResults()
     for key, run in allruns.items():
-        allstats[key] = comp(results2stats_dict, run,
+        allstats[key] = context.comp(results2stats_dict, run,
                              job_id=comp_stage_job_id(run, 'statsdict'))
 
-    jobs_tables(allstats, rm)
-    jobs_visualization(config, allruns, rm)
+    jobs_tables(context, allstats)
+    jobs_visualization(context, allruns)
     
-    rm.create_index_job()
     
 
 def instantiate_discdds(id_discdds):
@@ -96,47 +91,46 @@ def instantiate_testcase(id_tc):
     warnings.warn('make sure it it called with comp_config')
     return get_conftools_testcases().instance(id_tc)
 
-def jobs_report_tc(config, rm, testcases, alltc):
+def jobs_report_tc(context, testcases, alltc):
     for id_tc in testcases:
-        tc = config.testcases.instance(id_tc)
-        report = comp(report_tc, comp_store(config), id_tc, alltc[id_tc],
+        tc = get_conftools_testcases().instance(id_tc)
+        report = context.comp_config(report_tc, id_tc, alltc[id_tc],
                       job_id='report_tc-%s' % id_tc)
         report_attrs = dict(true_plan_length=len(tc.true_plan),
                             id_tc=id_tc, id_discdds=tc.id_discdds)
-        rm.add(report, 'tc', **report_attrs)
+        context.add_report(report, 'tc', **report_attrs)
 
-def jobs_report_dds(config, rm, discdds):
+def jobs_report_dds(context, discdds):
     for id_discdds, dds in discdds.items():
-        report = comp(report_dds, comp_store(config), id_discdds, dds,
+        report = context.comp(report_dds, id_discdds, dds,
                       job_id='report_dds-%s' % id_discdds)
-        rm.add(report, 'dds', id_discdds=id_discdds)
+        context.add_report(report, 'dds', id_discdds=id_discdds)
         
-def jobs_report_algo_init(config, rm, algoinit):  # @UnusedVariable
+def jobs_report_algo_init(context, algoinit):  # @UnusedVariable
     """ add the initialization report for each algorithm """
     for k, algo in algoinit.items():
         id_algo = k['id_algo'] 
         id_discdds = k['id_discdds']
         job_id = 'init-%s-%s-report' % (id_algo, id_discdds)
-        report = comp(report_init_algorithm, id_algo, id_discdds, algo,
+        report = context.comp(report_init_algorithm, id_algo, id_discdds, algo,
                       job_id=job_id)
         report_attrs = dict(id_algo=id_algo, id_discdds=id_discdds)
-        rm.add(report, 'init', **report_attrs)
+        context.add_report(report, 'init', **report_attrs)
         
 
-def jobs_visualization(config, allruns, rm):
-    
+def jobs_visualization(context, allruns):
     for run in allruns:
         id_tc = run['id_tc']
         id_algo = run['id_algo']
         result = allruns[run]
         job_id = 'plan-%s-%s-visualize' % (id_algo, id_tc)
-        report = comp(visualize_result, comp_store(config), id_tc, id_algo,
+        report = context.comp_config(visualize_result, id_tc, id_algo,
                       result, job_id=job_id)
         report_attrs = run
-        rm.add(report, 'visualization', **report_attrs)
+        context.add(report, 'visualization', **report_attrs)
 
 
-def init_algorithm(config, id_algo, id_discdds, discdds):
+def init_algorithm(id_algo, id_discdds, discdds):
     """ Returns the instanced DiffeoPlanninAlgorithm """
     warnings.warn('make sure it it called with comp_config')
     algo = get_conftools_planning_algos().instance(id_algo)    
@@ -158,7 +152,7 @@ def report_init_algorithm(id_algo, id_discdds, algo):
 
     
 @contract(returns=Report)
-def report_tc(config, id_tc, tc):
+def report_tc(id_tc, tc):
     warnings.warn('make sure it it called with comp_config')
     r = Report('tc-%s' % (id_tc))
     tc.display(r)
@@ -166,11 +160,10 @@ def report_tc(config, id_tc, tc):
 
 
 @contract(returns=Report)
-def report_dds(config, id_discdds, discdds, image='lena'):
+def report_dds(id_discdds, discdds, image='lena'):
     warnings.warn('make sure it it called with comp_config')
     r = Report('dds-%s' % (id_discdds))
-    image = config.images.instance(image)
-    y0 = UncertainImage(image)
+    y0 = get_conftools_uncertain_images().instance(image)
     discdds.display(r, y0)
     return r
 

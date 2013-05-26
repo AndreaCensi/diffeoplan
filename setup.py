@@ -1,16 +1,16 @@
 import os
 from setuptools import setup, find_packages
 
-version = "0.1"
+version = "1.0"
 
 description = """
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    Planning with diffeomorphisms
 """
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
     
-long_description = read('README.rst')
+long_description = read('README.md')
     
 
 setup(name='diffeoplan',
@@ -39,6 +39,11 @@ setup(name='diffeoplan',
       packages=find_packages('src'),
       install_requires=[ ],
       tests_require=['nose'],
-      entry_points={},
+      entry_points={
+        'console_scripts': [
+                            'dp = diffeoplan:dpmain',
+                            'dptr1 = dptr1:dptr1_main',
+                            ]
+    },
 )
 

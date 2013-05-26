@@ -15,6 +15,7 @@ from reprep.plot_utils import ieee_spines
 from reprep.report_utils import StoreResults
 import numpy as np
 import warnings
+from diffeoplan.programs.logcases.makelogcases import iterate_testcases
 warnings.warn('dependency on boot_agents')
 
 
@@ -81,7 +82,7 @@ def job_report_one(context, subsets, id_discdds, store):
         report = context.comp_config(report_predstats,
                                      id_discdds, id_subset, distances, records,
                                      job_id=job_id)
-        context.add_report(report, 'main', id_discdds=id_discdds, subset=id_subset)
+        context.add_report(report, 'predstats', id_discdds=id_discdds, subset=id_subset)
             
             
             
@@ -162,14 +163,14 @@ def report_predstats(id_discdds, id_subset, id_distances, records):
 
     return r
      
-def compute_predstats(config, id_discdds, id_stream, delta, id_distances):
-    dds = config.discdds.instance(id_discdds)
-    stream = config.streams.instance(id_stream)
-    distances = dict(map(lambda x: (x, config.distances.instance(x)), id_distances))
+def compute_predstats(id_discdds, id_stream, delta, id_distances):
+    dds = get_conftools_discdds().instance(id_discdds)
+    stream = get_conftools_streams().instance(id_stream)
+    distances_library = get_conftools_uncertain_image_distances()
+    distances = dict(map(lambda x: (x, distances_library.instance(x)), id_distances))
     dtype = [(x, 'float32') for x in id_distances]
     
     results = []
-#    pdb.set_trace()
     for logitem in iterate_testcases(stream.read_all(), delta):
         assert_allclose(len(logitem.u), delta)
         y0 = UncertainImage(logitem.y0)
@@ -178,7 +179,7 @@ def compute_predstats(config, id_discdds, id_stream, delta, id_distances):
         ds = []
         for name in id_distances:
             d = distances[name].distance(y1, py0)
-#            d0 = distances[name].distance(y1, y0)
+            #  d0 = distances[name].distance(y1, y0)
             ds.append(d)
         
         a = np.array(tuple(ds), dtype=dtype)

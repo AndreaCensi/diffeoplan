@@ -1,17 +1,18 @@
-from contracts import contract
-import numpy as np
 from collections import deque
-from diffeoplan.library import TestCase, UncertainImage
+from contracts import contract
+from diffeo2dds_learn import LogItem, get_conftools_streams
+from diffeoplan import TestCase
 from itertools import ifilter
-from diffeo2dds_learn.interface.streams import LogItem
+import numpy as np
+from diffeo2dds import UncertainImage
     
     
 @contract(delta='int,>=1', n='int,>=1')
-def make_logcases(config, id_stream, n, delta, id_tc_pattern,
+def make_logcases(id_stream, n, delta, id_tc_pattern,
                   id_discdds, discdds,
                   seed):
     
-    stream = config.streams.instance(id_stream)
+    stream = get_conftools_streams().instance(id_stream)
     stream_data = stream.read_all()
     miniplans = iterate_testcases(stream_data, delta)
     sampled = reservoir_sample(miniplans, N=n, seed=seed)

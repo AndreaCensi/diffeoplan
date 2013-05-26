@@ -1,5 +1,3 @@
-from . import logger
-from diffeoplan.programs.utils import declare_command
 import pdb
 import numpy as np
 import numpy.linalg as la
@@ -7,7 +5,7 @@ import itertools
 import pylab
 from PIL import Image  # @UnresolvedImport
 
-@declare_command('covariance', 'covariance  [-s <stream>]')
+# @declare_command('covariance', 'covariance  [-s <stream>]')
 def covariance(config, parser):
     """ Calculate the covariance of the pixels in the images in the logs"""
     parser.add_option("-s", "--stream", help="ID stream.", default='orbit-pt256-40')
@@ -71,7 +69,6 @@ def covariance(config, parser):
     pylab.savefig('covimg.png')
     
     pdb.set_trace()
-    
     
     logger.info('Processing')
     

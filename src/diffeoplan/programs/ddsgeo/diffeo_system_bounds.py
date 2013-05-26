@@ -14,7 +14,7 @@ import itertools
 __all__ = ['DiffeoSystemBounds2', 'DiffeoSystemBounds']
 
 
-class DiffeoSystemBounds:
+class DiffeoSystemBounds(object):
     def __init__(self, id_dds, dds, tolerance,
                  collapse_threshold,
                  min_visibility, debug_it, max_it):
