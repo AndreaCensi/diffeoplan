@@ -1,7 +1,6 @@
 from . import PlanningResult
 from reprep import Report
-from abc import ABCMeta
-from contracts import contract
+from contracts import contract, ContractsMeta
 from diffeo2dds import DiffeoSystem
 from diffeo2dds import UncertainImage
 from diffeoplan.utils import WithInternalLog
@@ -10,7 +9,7 @@ __all__ = ['DiffeoPlanningAlgo']
 
 class DiffeoPlanningAlgo(WithInternalLog):
     """ Interface for a generic planning algorithm. """
-    __metaclass__ = ABCMeta
+    __metaclass__ = ContractsMeta
     
     def __init__(self):
         WithInternalLog.__init__(self)

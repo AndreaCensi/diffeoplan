@@ -1,6 +1,6 @@
-from diffeoplan.programs.main import DP
-from quickapp.quick_app_base import QuickAppBase
-from diffeoplan.configuration.master import get_dp_config
+from diffeoplan.programs import DP
+from quickapp import QuickAppBase
+from diffeoplan import get_dp_config
 
 __all__ = ['DPShowConfig']
 

@@ -153,7 +153,6 @@ def report_init_algorithm(id_algo, id_discdds, algo):
     
 @contract(returns=Report)
 def report_tc(id_tc, tc):
-    warnings.warn('make sure it it called with comp_config')
     r = Report('tc-%s' % (id_tc))
     tc.display(r)
     return r
@@ -161,7 +160,6 @@ def report_tc(id_tc, tc):
 
 @contract(returns=Report)
 def report_dds(id_discdds, discdds, image='lena'):
-    warnings.warn('make sure it it called with comp_config')
     r = Report('dds-%s' % (id_discdds))
     y0 = get_conftools_uncertain_images().instance(image)
     discdds.display(r, y0)

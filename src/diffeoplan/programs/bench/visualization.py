@@ -3,7 +3,7 @@ import numpy as np
 
 __all__ = ['visualize_result', 'write_log_lines']
 
-def visualize_result(config, id_tc, id_algo, stats):
+def visualize_result(id_tc, id_algo, stats):
     """ Returns a report """
     
     result = stats['result']

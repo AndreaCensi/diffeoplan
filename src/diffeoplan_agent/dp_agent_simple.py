@@ -3,8 +3,9 @@ from bootstrapping_olympics.interfaces.agent import (AgentInterface,
 from conf_tools.code_specs import instantiate_spec
 from contracts import contract
 from diffeoplan.configuration.master import get_dp_config
-from diffeoplan.library.discdds.diffeo_system import DiffeoSystem
+
 from abc import abstractmethod
+from diffeo2dds.model.diffeo_system import DiffeoSystem
 
 
 class DiffeoPlanAgent(AgentInterface):

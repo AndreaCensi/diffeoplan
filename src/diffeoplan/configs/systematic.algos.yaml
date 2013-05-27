@@ -7,7 +7,7 @@
   - bidirectional: False
     metric_goal: &metric_goal L2w
     metric_collapse: &metric_collapse L2w
-    metric_collapse_threshold: -1 # no collapse
+    metric_collapse_threshold: 0
     max_iterations: "${n}"
     max_depth: &max_depth 15
     
@@ -37,7 +37,7 @@
   - bidirectional: False
     metric_goal: *metric_goal
     metric_collapse: *metric_collapse
-    metric_collapse_threshold: -1 # no collapse
+    metric_collapse_threshold: 0 # no collapse
     max_iterations: "${n}"
     max_depth: *max_depth
     diffeo_structure_params: &diffeo_structure_params
@@ -62,7 +62,7 @@
   - bidirectional: True
     metric_goal: *metric_goal
     metric_collapse: *metric_collapse
-    metric_collapse_threshold: -1 # no collapse
+    metric_collapse_threshold: 0 # no collapse
     max_iterations: "${n}"
     max_depth: *max_depth
 
@@ -85,7 +85,7 @@
   - bidirectional: True
     metric_goal: *metric_goal
     metric_collapse: *metric_collapse
-    metric_collapse_threshold: -1 # no collapse
+    metric_collapse_threshold: 0 # no collapse
     max_iterations: "${n}"
     max_depth: *max_depth
     diffeo_structure_params: *diffeo_structure_params
@@ -221,7 +221,7 @@
   - bidirectional: False
     metric_goal: L2
     metric_collapse: L2
-    metric_collapse_threshold: -10
+    metric_collapse_threshold: 0 
     max_iterations: "${n}"
     max_depth: *max_depth
     diffeo_structure_params: *diffeo_structure_params

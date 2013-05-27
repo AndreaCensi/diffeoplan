@@ -11,7 +11,8 @@ class DistanceNeighborEff(UncertainImageDistance):
     
     @contract(size='seq[2](int)', neighborarea='seq[2](int)')
     def __init__(self, size=[160, 120], neighborarea=[8, 8]):
-        self.fs = FlatStructure(shape=size, neighborarea=neighborarea)
+        self.fs = FlatStructure(shape=tuple(size),
+                                neighborarea=tuple(neighborarea))
         self.size = size
         
     def distance(self, y0, y1):

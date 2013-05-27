@@ -1,6 +1,6 @@
 from .simple import breadth_first
-from abc import abstractmethod, ABCMeta
-from contracts import contract
+from abc import abstractmethod
+from contracts import contract, ContractsMeta
 
 __all__ = ['GenericGraphSearch',
            'EDGE_EQUIV', 'EDGE_REGULAR', 'EDGE_REDUNDANT']
@@ -8,7 +8,7 @@ __all__ = ['GenericGraphSearch',
 
 class GenericGraphSearch(object):
     
-    __metaclass__ = ABCMeta
+    __metaclass__ = ContractsMeta
     
     def __init__(self):
         import networkx as nx

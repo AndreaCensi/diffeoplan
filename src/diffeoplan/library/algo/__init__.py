@@ -14,3 +14,5 @@ from .informed_planner_hierarchy import *
 from .sample_planner import *
 
 from .diffeo_cover_exp import *
+
+from .random_guess import *

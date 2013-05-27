@@ -15,6 +15,7 @@ class DistanceNeighborRatio(UncertainImageDistance):
         self.fs = None
         self.ratios = ratios
     
+    @contract(shape='seq[2](int,>=1)')
     def _get_flat_structure(self, shape):
         if self.fs is None:
             def make_size(x):
@@ -31,7 +32,7 @@ class DistanceNeighborRatio(UncertainImageDistance):
                                (self.ratios, shape, area))
             logger.info('ratios: %s shape: %s area: %s' % (self.ratios,
                                                            shape, area))
-            self.fs = FlatStructure(shape=shape, neighborarea=area)
+            self.fs = FlatStructure(shape=tuple(shape), neighborarea=tuple(area))
         
         return self.fs
         

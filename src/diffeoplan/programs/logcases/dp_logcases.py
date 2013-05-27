@@ -22,11 +22,9 @@ class DPLogCases(DP.get_sub(), QuickApp):
         params.add_int('delay', default=1, help='Delay between data (>=1).')
         
     def define_jobs_context(self, context):
-                
         id_stream = self.options.stream
         id_discdds = self.options.dds
         delay = self.options.delay
-        
         
         id_tc_pattern = self.options.pattern
         if id_tc_pattern is None:
@@ -40,7 +38,7 @@ class DPLogCases(DP.get_sub(), QuickApp):
         context.comp_config(make, id_discdds, outdir,
                            seed=self.options.seed, id_stream=id_stream,
                            n=self.options.n, delta=delay,
-                           id_discdds=id_discdds, id_tc_pattern=id_tc_pattern)
+                           id_tc_pattern=id_tc_pattern)
                            
                            
 def make(id_discdds, outdir, **params):

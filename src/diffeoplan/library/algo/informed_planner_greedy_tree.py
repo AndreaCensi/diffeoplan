@@ -1,7 +1,7 @@
 from .diffeo_tree_search_image_greedy_tree import (
     DiffeoTreeSearchImageGreedyTree)
 from .informed_planner import InformedPlanner
-from diffeoplan.configuration.master import get_dp_config
+from diffeoplan import get_dp_config
 
 __all__ = ['InformedPlannerGreedyTree']
 

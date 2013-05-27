@@ -1,10 +1,8 @@
-from diffeoplan import TestCase
-
-from diffeoplan.utils import assert_allclose
-from diffeoplan.configuration.master import get_dp_config
-from diffeo2dds.configuration.config_master import get_conftools_discdds
-from diffeo2dds.model.uncertain_image import UncertainImage
+from diffeo2dds import UncertainImage, get_conftools_discdds
 from diffeo2dds.analysis.pil_utils import resize
+from diffeoplan import TestCase, get_dp_config
+from diffeoplan.utils import assert_allclose
+from diffeo2dds.configuration.config_master import get_conftools_uncertain_images
 
 
 def ManualMotion(tcname, id_discdds, id_image, planstring):
@@ -36,12 +34,12 @@ def FromImages(tcname, id_discdds, image1, image2, true_plan=None):
     discdds = get_conftools_discdds().instance(id_discdds)
     shape = discdds.get_shape()
 
-    config = get_dp_config()
-    rgb1 = config.images.instance(image1)
+    images = get_conftools_uncertain_images()
+    rgb1 = images.instance(image1)
     image1 = resize(rgb1, shape[1], shape[0])       
     assert_allclose(image1.shape[:2], shape)
 
-    rgb2 = config.images.instance(image2)
+    rgb2 = images.instance(image2)
     image2 = resize(rgb2, shape[1], shape[0])       
     assert_allclose(image2.shape[:2], shape)
 

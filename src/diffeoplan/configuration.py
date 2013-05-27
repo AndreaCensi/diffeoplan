@@ -1,4 +1,3 @@
-from .checks import check_valid_set
 from conf_tools import ConfigMaster, ObjectSpec
 from contracts import contract
 
@@ -45,4 +44,14 @@ def get_conftools_testcases():
 @contract(returns=ObjectSpec)
 def get_conftools_batches():
     return get_dp_config().batches
+
+def check_valid_set(x):
+    necessary = [ 
+                  ('id', str),
+                  ('desc', str),
+                  ('algorithms', list),
+                  ('testcases', list),
+              ]
+    from conf_tools.checks import check_necessary
+    check_necessary(x, necessary)
 

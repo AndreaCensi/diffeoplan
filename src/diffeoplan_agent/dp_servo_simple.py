@@ -1,13 +1,13 @@
 from diffeoplan_agent.dp_agent_simple import DiffeoServoAgentInterface
 from contracts import contract
-from diffeoplan.library.images.uncertain_image import UncertainImage
 from conf_tools.code_specs import instantiate_spec
-from diffeoplan.library.discdds.plan_utils import plans_of_max_length
-from boot_agents.diffeo.analysis.pil_utils import resize
 from reprep import Report
 import numpy as np
-from diffeoplan.configuration.master import get_dp_config
 from diffeoplan.library.analysis.structure.diffeo_structure import DiffeoStructure
+from diffeoplan.configuration import get_dp_config
+from diffeo2dds.model.uncertain_image import UncertainImage
+from procgraph_pil.pil_operations import resize
+from diffeo2dds.model.plan_utils import plans_of_max_length
 
 
 class DiffeoPlanServoSimple(DiffeoServoAgentInterface):

@@ -1,7 +1,7 @@
 from .bench_jobs import create_bench_jobs
-from diffeoplan.programs.main import DP
-from quickapp.quick_app import QuickApp
-from diffeoplan.configuration.master import get_conftools_batches, get_dp_config
+from diffeoplan.programs import DP
+from quickapp  import QuickApp
+from diffeoplan  import get_conftools_batches, get_dp_config
 from quickapp import iterate_context_names
 
 

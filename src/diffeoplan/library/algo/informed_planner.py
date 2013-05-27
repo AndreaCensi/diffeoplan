@@ -1,10 +1,11 @@
+from .generic_graph_planner import GenericGraphPlanner
+from contracts import contract
+from diffeo2dds import DiffeoSystem
+from diffeoplan.library.analysis.structure.diffeo_structure import (
+    DiffeoStructure)
+from diffeoplan.library.analysis.structure.plan_reducer import PlanReducer
 from reprep import Report
 import itertools
-from diffeo2dds.model.diffeo_system import DiffeoSystem
-from contracts import contract
-from diffeoplan.library.algo.generic_graph_planner import GenericGraphPlanner
-from diffeoplan.library.analysis.structure.diffeo_structure import DiffeoStructure
-from diffeoplan.library.analysis.structure.plan_reducer import PlanReducer
 
 __all__ = ['InformedPlanner']
 
@@ -42,16 +43,15 @@ class InformedPlanner(GenericGraphPlanner):
         super(InformedPlanner, self).init(id_dds, dds_expanded)
         
     
-    def plan(self, *args, **kwargs):
+    def plan(self, y0, y1, precision, min_visibility):
         # we need to translate back the result according to the original plan
-        result = super(InformedPlanner, self).plan(*args, **kwargs)
+        result = super(InformedPlanner, self).plan(y0, y1, precision, min_visibility)
         if result.success:
             plan_extended = result.plan
             self.info('Solution found in extended space: %s' % str(plan_extended))
             plan_simple = self.get_dds().plan_with_simple_actions(plan_extended)
             self.info('With simple actions: %s' % str(plan_simple))
             result.plan = plan_simple
-        
         return result
         
     @contract(report=Report)

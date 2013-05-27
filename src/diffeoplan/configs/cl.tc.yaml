@@ -113,14 +113,14 @@
     image2: png-minimapv-02
     true_plan: [2, 2, 2, 2, 2]
 
-- id: t_m1_dcl4r128 
-- id: t_m2_dcl4r128 
-- id: t_m3_dcl4r128 
-- id: t_m4_dcl4r128 
-- id: t_m5_dcl4r128
-- id: t_m1_dcl4r80
-- id: t_m2_dcl4r80
-- id: t_m3_dcl4r80
-- id: t_m4_dcl4r80
-- id: t_m5_dcl4r80
+- id: t_m1_sym-dcl4r-128 
+- id: t_m2_sym-dcl4r-128 
+- id: t_m3_sym-dcl4r-128 
+- id: t_m4_sym-dcl4r-128 
+- id: t_m5_sym-dcl4r-128
+- id: t_m1_sym-dcl4r-80
+- id: t_m2_sym-dcl4r-80
+- id: t_m3_sym-dcl4r-80
+- id: t_m4_sym-dcl4r-80
+- id: t_m5_sym-dcl4r-80
 

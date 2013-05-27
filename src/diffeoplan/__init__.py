@@ -13,3 +13,10 @@ from .configuration import *
 from .interfaces import *
 from . import library
 from .programs import *
+
+
+def get_comptests():
+    from . import unittests 
+    from comptests import get_comptests_app
+    app = get_comptests_app(get_dp_config())
+    return [app]

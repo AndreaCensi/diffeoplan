@@ -1,19 +1,14 @@
+from .diffeo_tree_search_image import DiffeoTreeSearchImage
+from .tree_connector import Connector
 from contracts import contract
-from diffeo2dds.model.plan_utils import plan_steps, plan_friendly
-from diffeoplan.configuration.master import get_dp_config
-from diffeoplan.interfaces.planning_algo import DiffeoPlanningAlgo
-from diffeoplan.library.algo.diffeo_tree_search_image import (
-    DiffeoTreeSearchImage)
+from diffeo2dds import (DiffeoAction, UncertainImage, DiffeoSystem, plan_steps,
+    plan_friendly)
+from diffeo2dds.visualization import guess_state_space
+from diffeoplan import DiffeoPlanningAlgo, PlanningResult, get_dp_config
+from diffeoplan.library.analysis.structure.plan_reducer import PlanReducer
 from reprep import Report
 from reprep.plot_utils import turn_all_axes_off
 import time
-from diffeo2dds.model.diffeo_system import DiffeoSystem
-from diffeo2dds.model.uncertain_image import UncertainImage
-from diffeoplan.interfaces.planning_result import PlanningResult
-from diffeo2dds.visualization.guess import guess_state_space
-from diffeo2dds.model.diffeo_action import DiffeoAction
-from diffeoplan.library.algo.tree_connector import Connector
-from diffeoplan.library.analysis.structure.plan_reducer import PlanReducer
 
 __all__ = ['GenericGraphPlanner']
  

@@ -3,7 +3,6 @@ from diffeo2dds_learn import DDSLLearn
 from diffeoplan import DPDistStats, DPPredStats, DPShowGeo
 from quickapp import QuickApp
 from diffeoplan.programs.ddsgeo.show_discdds_fill import DPShowFill
-from diffeoplan.programs.bench.dp_batch import DPBatch
 from diffeoplan.programs.logcases.dp_logcases import DPLogCases
 
 __all__ = ['DPTR1']

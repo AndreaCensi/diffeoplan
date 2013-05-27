@@ -1,9 +1,8 @@
+from diffeo2dds import get_conftools_uncertain_image_distances
+from diffeoplan import get_conftools_testcases
+from diffeoplan.programs import DP
+from quickapp import iterate_context_names, QuickApp
 import warnings
-from diffeoplan.programs.main import DP
-from quickapp.quick_app import QuickApp
-from diffeo2dds.configuration.config_master import get_conftools_uncertain_image_distances
-from diffeoplan.configuration.master import get_conftools_testcases
-from quickapp.app_utils.subcontexts import iterate_context_names
 
 __all__ = ['DPDistFPS']
 
