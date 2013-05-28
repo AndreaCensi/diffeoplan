@@ -1,14 +1,14 @@
 from .diffeo_tree_search_image_greedy import DiffeoTreeSearchImageGreedy
 from .informed_planner import InformedPlanner
-from diffeoplan import get_dp_config
+from diffeo2dds import get_conftools_uncertain_image_distances
 
 __all__ = ['InformedPlannerGreedy']
 
 class InformedPlannerGreedy(InformedPlanner):
 
     def __init__(self, metric_attractor, **kwargs):
-        config = get_dp_config()
-        self.metric_attractor = config.distances.instance(metric_attractor)
+        distances = get_conftools_uncertain_image_distances()
+        self.metric_attractor = distances.instance(metric_attractor)
         super(InformedPlannerGreedy, self).__init__(**kwargs)
         
     def plan_init(self, y0, y1):

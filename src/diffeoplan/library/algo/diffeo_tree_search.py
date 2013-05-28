@@ -1,14 +1,13 @@
+from contracts import contract
+from diffeo2dds import DiffeoAction, DiffeoSystem
+from diffeo2dds.visualization import guess_state_space
+from diffeoplan.library import Memoized
+from diffeoplan.library.analysis.structure.plan_reducer import PlanReducer
 from diffeoplan.utils import WithInternalLog
 from ggs import GenericGraphSearch
 import collections
 import networkx as nx
-from diffeo2dds.model.diffeo_system import DiffeoSystem
-from diffeo2dds.model.diffeo_action import DiffeoAction
-from diffeo2dds.visualization.guess import guess_state_space
-import numpy as np 
-from contracts import contract
-from diffeoplan.library import Memoized
-from diffeoplan.library.analysis.structure.plan_reducer import PlanReducer
+import numpy as np
 
 
 __all__ = ['DiffeoTreeSearch']

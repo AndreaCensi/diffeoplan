@@ -1,4 +1,4 @@
-from diffeo2dds.model.uncertain_image import UncertainImage
+from diffeo2dds import UncertainImage
 from contracts import contract
 from .diffeo_tree_search import DiffeoTreeSearch
 from diffeoplan.library.memoize_strategy import dp_memoize_instance

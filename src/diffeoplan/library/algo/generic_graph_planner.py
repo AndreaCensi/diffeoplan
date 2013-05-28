@@ -4,11 +4,12 @@ from contracts import contract
 from diffeo2dds import (DiffeoAction, UncertainImage, DiffeoSystem, plan_steps,
     plan_friendly)
 from diffeo2dds.visualization import guess_state_space
-from diffeoplan import DiffeoPlanningAlgo, PlanningResult, get_dp_config
+from diffeoplan import DiffeoPlanningAlgo, PlanningResult
 from diffeoplan.library.analysis.structure.plan_reducer import PlanReducer
 from reprep import Report
 from reprep.plot_utils import turn_all_axes_off
 import time
+from diffeo2dds import get_conftools_uncertain_image_distances
 
 __all__ = ['GenericGraphPlanner']
  
@@ -20,7 +21,7 @@ class GenericGraphPlanner(DiffeoPlanningAlgo):
                  metric_goal,
                  metric_collapse, metric_collapse_threshold,
                  max_depth=10000, max_iterations=10000, max_time=120,
-                 max_memory_MB=25,):
+                 max_memory_MB=25):
         '''
         
         :param bidirectional:
@@ -34,9 +35,10 @@ class GenericGraphPlanner(DiffeoPlanningAlgo):
         '''
         super(GenericGraphPlanner, self).__init__()
         self.bidirectional = bidirectional
-        config = get_dp_config()
-        self.metric_goal = config.distances.instance(metric_goal)        
-        self.metric_collapse = config.distances.instance(metric_collapse)        
+        
+        distances = get_conftools_uncertain_image_distances()
+        self.metric_goal = distances.instance(metric_goal)        
+        self.metric_collapse = distances.instance(metric_collapse)        
         self.metric_collapse_threshold = metric_collapse_threshold
         self.max_iterations = max_iterations
         self.max_depth = max_depth

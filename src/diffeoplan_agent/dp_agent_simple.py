@@ -1,19 +1,17 @@
-from bootstrapping_olympics.interfaces.agent import (AgentInterface,
-    ServoAgentInterface)
-from conf_tools.code_specs import instantiate_spec
-from contracts import contract
-from diffeoplan.configuration.master import get_dp_config
-
 from abc import abstractmethod
-from diffeo2dds.model.diffeo_system import DiffeoSystem
+from bootstrapping_olympics import AgentInterface, ServoAgentInterface
+from conf_tools import instantiate_spec
+from contracts import contract
+from diffeo2dds import DiffeoSystem, get_conftools_discdds
 
+
+__all__ = ['DiffeoPlanAgent']
 
 class DiffeoPlanAgent(AgentInterface):
     
     @staticmethod
     def from_yaml(discdds, servo):
-        dp_config = get_dp_config()
-        _, i = dp_config.discdds.instance_smarter(discdds)
+        _, i = get_conftools_discdds().instance_smarter(discdds)
         return DiffeoPlanAgent(i, servo)
 
     @contract(discdds=DiffeoSystem)

@@ -1,8 +1,8 @@
 from collections import deque
 from compmake.utils import duration_human
 from contracts import contract, describe_type
+from decent_logs import WithInternalLog
 from decorator import decorator
-from diffeoplan.utils import WithInternalLog
 from reprep.utils import frozendict2
 import time
 

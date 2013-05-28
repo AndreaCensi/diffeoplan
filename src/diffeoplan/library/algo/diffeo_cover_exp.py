@@ -1,11 +1,10 @@
+from .diffeo_tree_search import DiffeoTreeSearch
 from contracts import contract
 from diffeo2dds import DiffeoActionDistance, plan_friendly
-from diffeo2dds.library.diffeo_action_distances.diffeo_action_distances import (
-    diffeoaction_distance_L2_infow)
+from diffeo2dds.library import diffeoaction_distance_L2_infow
 from diffeo2dds.visualization import guess_state_space
 from diffeo2s.utils import construct_matrix_iterators
 from diffeoplan import logger
-from diffeoplan.library.algo.diffeo_tree_search import DiffeoTreeSearch
 from diffeoplan.library import dp_memoize_instance
 from diffeoplan.library.analysis.covering.diffeo_cover_visualization import (
     get_nodes_distance_matrix, edges_type_to_color, get_embedding_mds, plot_2d_graph,
