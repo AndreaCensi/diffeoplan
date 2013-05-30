@@ -84,7 +84,7 @@ class DiffeoPlanServoSimple(DiffeoServoAgentInterface):
         ui = UncertainImage(y)
         return ui
         
-class AllMaxLength:
+class AllMaxLength(object):
     
     def __init__(self, nsteps):
         self.nsteps = nsteps
@@ -94,7 +94,7 @@ class AllMaxLength:
         plans = plans_of_max_length(ncmd, self.nsteps)
         return plans
 
-class AllMaxLengthMult:
+class AllMaxLengthMult(object):
     
     @contract(mult='int')
     def __init__(self, nsteps, mult):
@@ -115,7 +115,7 @@ class AllMaxLengthMult:
         
         
 
-class AllMaxLengthMult2:
+class AllMaxLengthMult2(object):
     
     @contract(mult='list(int)')
     def __init__(self, nsteps, mult):

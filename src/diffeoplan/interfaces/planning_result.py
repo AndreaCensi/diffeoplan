@@ -3,7 +3,7 @@ from contracts import contract
 __all__ = ['PlanningResult']
 
 
-class PlanningResult:
+class PlanningResult(object):
     """ Results of planning. (more fields might be added in the future) """
     
     @contract(success='bool', plan='None|seq(int)', status='None|str', extra='dict')

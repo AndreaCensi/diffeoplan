@@ -15,7 +15,7 @@ __all__ = ['Stats']
 class Statistic(FunctionWithDescription):
     pass
 
-class Stats:
+class Stats(object):
     statistics = {}
     
     tables_for_single_sample = {}
