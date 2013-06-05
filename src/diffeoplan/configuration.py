@@ -10,18 +10,19 @@ class DiffeoplanConfigMaster(ConfigMaster):
     def __init__(self):
         ConfigMaster.__init__(self, 'dp')
         
-        from diffeoplan import TestCase
         from diffeoplan import DiffeoPlanningAlgo
+        from diffeoplan import TestCase
+        from diffeoplan import DiffeoplanBatch
   
         self.algos = \
             self.add_class_generic('algos', '*.algos.yaml',
                                    DiffeoPlanningAlgo)
- 
         self.testcases = \
             self.add_class_generic('testcases', '*.tc.yaml', TestCase)
         
-        self.batches = self.add_class('batches', '*.batch.yaml', check_valid_set)
-  
+        self.batches = \
+            self.add_class_generic('batches', '*.batch.yaml', DiffeoplanBatch)
+        
   
     def get_default_dir(self):
         from pkg_resources import resource_filename  # @UnresolvedImport
@@ -45,13 +46,4 @@ def get_conftools_testcases():
 def get_conftools_batches():
     return get_dp_config().batches
 
-def check_valid_set(x):
-    necessary = [ 
-                  ('id', str),
-                  ('desc', str),
-                  ('algorithms', list),
-                  ('testcases', list),
-              ]
-    from conf_tools.checks import check_necessary
-    check_necessary(x, necessary)
 

@@ -26,6 +26,6 @@ class DistanceCrop(UncertainImageDistance):
         y1c = y1.crop(self.top, self.right, self.bottom, self.left)
         d = self.other2.distance(y0, y1)  # TMP
         dc = self.other.distance(y0c, y1c)
-        logger.debug('Distance cropped %s: %s  uncropped %s' % 
-                     (self.id_distance, dc, d))
+        # logger.debug('Distance cropped %s: %s  uncropped %s' % 
+        #             (self.id_distance, dc, d))
         return dc

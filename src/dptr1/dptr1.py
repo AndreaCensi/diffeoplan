@@ -4,6 +4,7 @@ from diffeoplan import DPDistStats, DPPredStats, DPShowGeo
 from quickapp import QuickApp
 from diffeoplan.programs.ddsgeo.show_discdds_fill import DPShowFill
 from diffeoplan.programs.logcases.dp_logcases import DPLogCases
+from diffeoplan.programs.bench.dp_batch import DPBatch
 
 __all__ = ['DPTR1']
 
@@ -32,11 +33,10 @@ class DPTR1(QuickApp):
         estimator = 'test_ddsest_unc_refine2'  # "n35s"
         max_displ = 0.35
         
-        context.subtask(DDSLLearn, estimator=estimator, stream=stream,
+        learned = context.subtask(DDSLLearn, estimator=estimator, stream=stream,
                         max_displ=max_displ)
-        
-        context.checkpoint('learned')
-        
+        rm = context.get_resource_manager()
+        rm.set_resource(learned, 'discdds', id_discdds='test_ddsest_unc_refine2_orbit-pt256-80')
                 
         # dp plearn -s $stream -l n35s -c "clean *summarize*; parmake "
         # dp plearn -s $stream -l n35o -c "clean *summarize*; parmake "        
@@ -76,17 +76,24 @@ class DPTR1(QuickApp):
         
         c_planning = context.child('planning')
 
-        for delay in range(1, 9):
+        alltestcases = []
+        for delay in range(1, 13):
             # XXX: I didn't want to change the name in the configuration
             pattern = 'tc_h1orbit-pt256-80-n35s_d%d' % (delay) + '_%03d'
-            c_planning.subtask(DPLogCases, stream=stream, pattern=pattern,
-                            dds=dds_orbit, delay=delay)
+            tcs = c_planning.subtask(DPLogCases, stream=stream, pattern=pattern,
+                               dds=dds_orbit, delay=delay)
+            alltestcases.extend(tcs)
+            
+#             for id_tc in id_tc2job:
+#                 testcases = get_conftools_testcases()
+#                 testcases.add_spec(id_tc, 'generated', ['', {}])
+                
         c_planning.checkpoint('testcases')
         
 #         nice -n 10 dp batch -o out.tr1/dp-batch tr1_orbit_r80 -c "parmake n=6"
 #         nice -n 10 dp batch -o out.tr1/dp-batch tr1_park_r80    -c "parmake n=4"
 #         nice -n 10 dp batch -o out.tr1/dp-batch tr1_park_r128    -c "parmake n=4"
         batches = ['tr1_orbit_r80', 'tr1_park_r80', 'tr1_park_r128']
-        # c_planning.subtask(DPBatch, batches=",".join(batches))
+        c_planning.subtask(DPBatch, batches=",".join(batches), alltestcases=alltestcases)
 
 

@@ -28,9 +28,9 @@ class DPShowConfig(DP.get_sub(), QuickAppBase):
             print('Algorithms:')
             print(config.algos.summary_string_id_desc_patterns())
         
-        if options.type == 'sets' or allofthem:
+        if options.type == 'batches' or allofthem:
             print('Batch experiments:')
-            print(config.sets.summary_string_id_desc_patterns())
+            print(config.batches.summary_string_id_desc_patterns())
             
         if options.type == 'testcases' or allofthem:
             if options.verbose:

@@ -7,8 +7,8 @@ import numpy as np
 from diffeo2dds import UncertainImage
     
     
-@contract(delta='int,>=1', n='int,>=1')
-def make_logcases(id_stream, n, delta, id_tc_pattern,
+@contract(delta='int,>=1', n='int,>=1', id_tcs='list(str)')
+def make_logcases(id_stream, n, delta, id_tcs,
                   id_discdds, discdds,
                   seed):
     
@@ -18,7 +18,7 @@ def make_logcases(id_stream, n, delta, id_tc_pattern,
     sampled = reservoir_sample(miniplans, N=n, seed=seed)
     
     for i, m in enumerate(sampled):
-        id_tc = id_tc_pattern % i
+        id_tc = id_tcs[i]
         I0 = UncertainImage(m.y0)
         I1 = UncertainImage(m.y1)
         assert len(m.u) == delta

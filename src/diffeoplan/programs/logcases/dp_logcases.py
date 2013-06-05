@@ -35,10 +35,16 @@ class DPLogCases(DP.get_sub(), QuickApp):
         if not os.path.exists(outdir):
             os.makedirs(outdir)
         
-        context.comp_config(make, id_discdds, outdir,
+        n = self.options.n
+        id_tcs = [id_tc_pattern % i for i in range(n)]
+        filenames = [os.path.join(outdir, '%s.tc.yaml' % s) for s in id_tcs]
+        if not os.path.exists(filenames[0]):
+            context.comp_config(make, id_discdds=id_discdds, outdir=outdir,
                            seed=self.options.seed, id_stream=id_stream,
-                           n=self.options.n, delta=delay,
-                           id_tc_pattern=id_tc_pattern)
+                           n=n, delta=delay,
+                           id_tcs=id_tcs)
+        # return dict((id_tc, job) for id_tc in id_tcs)
+        return id_tcs
                            
                            
 def make(id_discdds, outdir, **params):
