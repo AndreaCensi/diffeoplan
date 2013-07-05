@@ -8,7 +8,7 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-from . import utils
+from .utils import *  # XXX
 from .configuration import *
 from .interfaces import *
 from . import library

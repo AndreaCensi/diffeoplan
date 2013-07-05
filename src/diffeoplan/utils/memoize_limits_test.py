@@ -1,4 +1,4 @@
-from diffeoplan.utils.memoize_limits import memoize_limited
+from .memoize_limits import memoize_limited
 from numpy.testing.utils import assert_allclose
 
 
@@ -17,11 +17,11 @@ def class_factory(max_size, max_mem_MB, object_size):
     class MyClass(object):
         
         @memoize_limited(max_size=max_size, max_mem_MB=max_mem_MB)
-        def f1(self, x): #@UnusedVariable
+        def f1(self, x):  # @UnusedVariable
             return LargeObject(object_size)
         
         @memoize_limited(max_size=max_size, max_mem_MB=max_mem_MB)
-        def f2(self, x): #@UnusedVariable
+        def f2(self, x):  # @UnusedVariable
             return LargeObject(object_size)
         
     return MyClass
@@ -60,8 +60,8 @@ def expensive_test():
     print A.memoize_cache.summary()
     
     assert_allclose(A.memoize_cache.ncalls, N * 4 + N * 2)
-    assert_allclose(A.memoize_cache.nhits, N * 2 + 0) # no new hits 
-    assert_allclose(A.memoize_cache.nmiss, N * 2 + N * 2) # many new missed
+    assert_allclose(A.memoize_cache.nhits, N * 2 + 0)  # no new hits 
+    assert_allclose(A.memoize_cache.nmiss, N * 2 + N * 2)  # many new missed
     # we had to erase all the previous ones
     assert_allclose(A.memoize_cache.nerased, N * 2) 
     

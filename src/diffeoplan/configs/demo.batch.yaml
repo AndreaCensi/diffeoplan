@@ -9,6 +9,7 @@
     - random2
     testcases:
     - tc_dcam1_lena_d5_*
+    discdds: tc_dcam1
 
 
 - id: demo2
@@ -20,7 +21,7 @@
     - random2
     testcases:
     - tc_dcam1_lena_d10_*
-
+    discdds: tc_dcam1
 
 
 - id: demo3
@@ -31,7 +32,7 @@
     - graphsearch_breadth_3
     testcases:
     - tc_dcam1_lena_d10_*
-  
+    discdds: tc_dcam1
   
 
 - id: struct_torus1_d10
@@ -42,5 +43,5 @@
     - structured_breadth_20
     testcases:
     - tc_dtx2_lena_d10_*
-
+    discdds: tc_dcam1
   

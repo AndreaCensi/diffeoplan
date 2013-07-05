@@ -1,0 +1,10 @@
+.. |diffeoplan| raw:: html
+      
+      <span class="brand">diffeoplan</span>
+
+
+.. |towrite| raw:: html
+
+     <span style="font-weight:bold">This section must still be written.</span>
+	 
+	 

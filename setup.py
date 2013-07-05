@@ -37,7 +37,7 @@ setup(name='diffeoplan',
       
       package_dir={'':'src'},
       packages=find_packages('src'),
-      install_requires=[ ],
+      install_requires=['networkx' ],
       tests_require=['nose'],
       entry_points={
         'console_scripts': [
