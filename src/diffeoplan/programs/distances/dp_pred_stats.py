@@ -1,4 +1,3 @@
-from boot_agents.utils import scale_score
 from contracts import contract
 from diffeo2dds import (UncertainImage, get_conftools_discdds,
     get_conftools_uncertain_image_distances)
@@ -14,9 +13,8 @@ from reprep import Report
 from reprep.plot_utils import ieee_spines
 from reprep.report_utils import StoreResults
 import numpy as np
-import warnings
 from diffeoplan.programs.logcases.makelogcases import iterate_testcases
-warnings.warn('dependency on boot_agents')
+from diffeoplan.utils.nonparametri import scale_score
 
 
 __all__ = ['DPPredStats']

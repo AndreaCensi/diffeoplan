@@ -62,6 +62,7 @@
     - t_m3_sym-dcl4r-80
     - t_m4_sym-dcl4r-80
     - t_m5_sym-dcl4r-80
+    discdds: sym-dcl4r-80
 
 - id: test_tr1_cl_6
   desc: ""
@@ -75,6 +76,7 @@
     - t_m3_dcl4r128
     - t_m4_dcl4r128
     - t_m5_dcl4r128
+    discdds: dcl4r128
 
 
 - id: test_tr1_cl_7
@@ -93,6 +95,8 @@
     - t_m3_dcl4r128
     - t_m4_dcl4r128
     - t_m5_dcl4r128
+
+    discdds: dcl4r128
 
 - id: test_tr1_cl_4
   desc: ""
@@ -117,3 +121,5 @@
     - t_m3_sym-dcl4r-80_addbra2 
     - t_m4_sym-dcl4r-80_addbra2
     - t_m5_sym-dcl4r-80_addbra2
+    discdds: sym-dcl4r-80_bra1 # XXX: also other
+

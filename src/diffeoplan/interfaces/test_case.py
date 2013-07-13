@@ -1,14 +1,11 @@
-from bootstrapping_olympics.utils import safe_pickle_dump
+from compmake.utils import safe_pickle_dump
 from conf_tools import write_entries
 from conf_tools.utils import friendly_path
 from contracts import contract
-from diffeo2dds.configuration.config_master import get_conftools_discdds
-from diffeo2dds.model.uncertain_image import UncertainImage
+from diffeo2dds import UncertainImage, get_conftools_discdds
 from diffeoplan import logger
 from reprep import rgb_zoom, scale
 import os
-import warnings
-warnings.warn('wrong dependency')
 
 
 __all__ = ['TestCase']

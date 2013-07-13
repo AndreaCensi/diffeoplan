@@ -3,6 +3,7 @@ from diffeoplan import get_conftools_testcases
 from diffeoplan.programs import DP
 from quickapp import iterate_context_names, QuickApp
 import warnings
+from diffeoplan.utils.in_a_while import InAWhile
 
 __all__ = ['DPDistFPS']
 
@@ -36,8 +37,6 @@ class DPDistFPS(DP.get_sub(), QuickApp):
        
 
 def benchmark_distance(id_distance, testcases, repeat):
-    warnings.warn('remove dependency')
-    from bootstrapping_olympics.utils.in_a_while import InAWhile
 
     library_testcases = get_conftools_testcases()
     testcases = map(library_testcases.instance, testcases)

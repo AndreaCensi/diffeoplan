@@ -7,3 +7,4 @@ from numpy.testing.utils import assert_allclose
 
 from decent_logs import WithInternalLog
 
+from .in_a_while import *
