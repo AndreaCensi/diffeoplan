@@ -7,8 +7,6 @@ from reprep.report_utils import (FunctionWithDescription, WithDescription,
 from reprep.utils import frozendict2
 import itertools
 from diffeo2dds.model.plan_utils import plan_friendly
-from diffeoplan.library.distances.distance_norm import DistanceNorm
-from diffeoplan.library.distances.distance_norm_weighted import DistanceNormWeighted
 
 __all__ = ['Stats']
 
@@ -80,9 +78,13 @@ Stats.describe_image('ity1', 'Predicted goal using true plan inverse', 'p_{\circ
         
 
 def get_visualization_distances():
+    from diffeo2dds.library.uncertain_image_distances import DistanceNorm
+    from diffeo2dds.library.uncertain_image_distances import DistanceNormWeighted
+
     distances = {}
     distances['L2'] = dict(distance=DistanceNorm(2), symbol='L_2')
     distances['L1'] = dict(distance=DistanceNorm(1), symbol='L_1')
+    
     distances['L1w'] = dict(distance=DistanceNormWeighted(1), symbol='L_1^w')
     distances['L2w'] = dict(distance=DistanceNormWeighted(2), symbol='L_2^w')
     return distances

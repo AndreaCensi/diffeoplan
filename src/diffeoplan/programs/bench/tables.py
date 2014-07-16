@@ -1,5 +1,5 @@
 from .statistics import Stats
-from compmake import comp_store
+# from compmake import comp_store
 from contracts import contract
 from diffeoplan import logger
 from itertools import product
@@ -56,7 +56,7 @@ def jobs_tables(context, allstats):
         
 def jobs_tables_by_sample_groups(context, samples_groups, tables):
     source_descs = comp_store(Stats.all_descriptions())
-    print tables
+    
     # Tables grouping by algorithm
     for g, s in product(samples_groups.items(), tables.items()):
         id_sample_group, samples = g

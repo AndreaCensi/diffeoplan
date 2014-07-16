@@ -1,7 +1,7 @@
 from .bench import run_planning, run_planning_stats
 from .tables import results2stats_dict, jobs_tables
 from .visualization import visualize_result
-from compmake import comp_stage_job_id
+# from compmake import comp_stage_job_id
 from contracts import contract
 from diffeo2dds import get_conftools_discdds, get_conftools_uncertain_images
 from diffeoplan import (get_conftools_testcases, get_conftools_planning_algos,
@@ -95,8 +95,8 @@ def create_bench_jobs(context, batch, alltestcases):
 
     allstats = StoreResults()
     for key, run in allruns.items():
-        allstats[key] = context.comp(results2stats_dict, run,
-                             job_id=comp_stage_job_id(run, 'statsdict'))
+        allstats[key] = context.comp(results2stats_dict, run),
+#                              job_id=comp_stage_job_id(run, 'statsdict'))
 
     jobs_tables(context, allstats)
     jobs_visualization(context, allruns)
