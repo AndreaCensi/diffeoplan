@@ -1,5 +1,4 @@
-from compmake import (batch_command, compmake_console,# use_filesystem,
-    read_rc_files)
+# from compmake import (batch_command, compmake_console,# use_filesystem,    read_rc_files)
 import os
 
 # @declare_command('bench',

@@ -4,8 +4,7 @@ import itertools
 import numpy as np
 import numpy.linalg as la
 import os
-from compmake import (batch_command, compmake_console, comp, use_filesystem,
-                      read_rc_files)
+ 
 import copy
 from diffeo2dds.model.writing import ds_dump
 

@@ -1,9 +1,7 @@
 from .statistics import Stats
-# from compmake import comp_store
 from contracts import contract
 from diffeoplan import logger
 from itertools import product
-from quickapp.report_manager import ReportManager
 from reprep.report_utils import StoreResults, table_by_rows
 import warnings
 

@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from bootstrapping_olympics import AgentInterface, ServoAgentInterface
+from bootstrapping_olympics import (BasicAgent, ServoAgentInterface, 
+    ServoingAgent)
 from conf_tools import instantiate_spec
 from contracts import contract
 from diffeo2dds import DiffeoSystem, get_conftools_discdds
@@ -7,7 +8,7 @@ from diffeo2dds import DiffeoSystem, get_conftools_discdds
 
 __all__ = ['DiffeoPlanAgent']
 
-class DiffeoPlanAgent(AgentInterface):
+class DiffeoPlanAgent(BasicAgent, ServoingAgent):
     
     @staticmethod
     def from_yaml(discdds, servo):

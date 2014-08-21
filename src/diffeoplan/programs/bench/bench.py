@@ -1,9 +1,9 @@
 from contracts import contract
 from diffeo2dds.model.diffeo_system import DiffeoSystem
 from diffeoplan import TestCase, logger
-from diffeoplan.programs.bench.statistics import (get_visualization_distances,
-    Stats)
-from reprep.report_utils.storing.store_results import StoreResults
+from diffeoplan.programs.bench.statistics import (Stats, 
+    get_visualization_distances)
+from reprep.report_utils import StoreResults
 import itertools
 import time
 import warnings
