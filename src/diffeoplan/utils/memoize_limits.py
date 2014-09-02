@@ -1,5 +1,5 @@
 from collections import deque
-from compmake.utils import duration_human
+from compmake.utils import duration_compact
 from contracts import contract, describe_type
 from decent_logs import WithInternalLog
 from decorator import decorator
@@ -24,7 +24,7 @@ def timestring(sec):
     if sec < 1:
         return '%.3f sec' % sec
     else:
-        return duration_human(sec)
+        return duration_compact(sec)
 
 class CacheResult(object):
     def __init__(self, value, clock, wall, size=None):

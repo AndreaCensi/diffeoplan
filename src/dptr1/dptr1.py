@@ -19,8 +19,7 @@ class DPTR1(QuickApp):
         # Load defaults for everybody
         GlobalConfig.global_load_dir('default')
         # Load our specific config
-        from pkg_resources import resource_filename  # @UnresolvedImport
-        config_dir = resource_filename("dptr1", "configs")
+        config_dir = "dptr1.configs"
         GlobalConfig.global_load_dir(config_dir)
         
         # So we can load objects we create

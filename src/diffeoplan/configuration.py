@@ -25,8 +25,7 @@ class DiffeoplanConfigMaster(ConfigMaster):
         
   
     def get_default_dir(self):
-        from pkg_resources import resource_filename  # @UnresolvedImport
-        return resource_filename("diffeoplan", "configs")
+        return "diffeoplan.configs"
 
  
 get_dp_config = DiffeoplanConfigMaster.get_singleton
